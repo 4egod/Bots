@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Facebook.Messaging", "Facebook.Messaging\Facebook.Messaging.csproj", "{85750C38-F95C-443C-AA65-705C286DC9D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Facebook.Tests", "Facebook.Tests\Facebook.Tests.csproj", "{7A8183BB-41D7-4152-9425-A721225FB5C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85750C38-F95C-443C-AA65-705C286DC9D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85750C38-F95C-443C-AA65-705C286DC9D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85750C38-F95C-443C-AA65-705C286DC9D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85750C38-F95C-443C-AA65-705C286DC9D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A8183BB-41D7-4152-9425-A721225FB5C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A8183BB-41D7-4152-9425-A721225FB5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A8183BB-41D7-4152-9425-A721225FB5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A8183BB-41D7-4152-9425-A721225FB5C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {82E27EDB-51BC-4BC5-B242-45AAA0356BB8}
+	EndGlobalSection
+EndGlobal
