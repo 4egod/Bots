@@ -12,17 +12,17 @@ namespace Facebook.Messaging
     {
         public readonly Version ApiVersion = new Version(3, 1);
 
-
-        private string pageToken;
         private HttpClient httpClient;
 
         public MessagingClient(string pageToken)
         {
-            this.pageToken = pageToken;
+            PageToken = pageToken;
             httpClient = new HttpClient();
         }
 
-        public string ApiUri => $"https://graph.facebook.com/v{ApiVersion}/me/messages?access_token={pageToken}";
+        public string ApiUri => $"https://graph.facebook.com/v{ApiVersion}/me/messages?access_token={PageToken}";
+
+        public string PageToken { get; private set; }
 
         public async Task<string> SendMessageAsync(ulong userId, string text)
         {
@@ -31,6 +31,11 @@ namespace Facebook.Messaging
 
         public async Task<string> SendMessageAsync(ulong userId, string text, List<QuickReply> quickReplies)
         {
+            if (text == null)
+            {
+                throw new NullReferenceException(nameof(text));
+            }
+
             Recipient recipient = new Recipient() { id = userId.ToString() };
             Message message = new Message() { text = text };
             message.quick_replies = quickReplies;
@@ -79,9 +84,27 @@ namespace Facebook.Messaging
 
 
 
+        public async Task<string> SendAttachment<T>(ulong userId, T attachment)
+        {
+            Recipient recipient = new Recipient() { id = userId.ToString() };
+            Message<T> message = new Message<T>() { Attachment = attachment };
+            MessageContainer container = new MessageContainer()
+            {
+                recipient = recipient,
+                message = message
+            };
+
+            var response = await PostAsync<Response>(container, ApiUri);
+            return response.message_id;
+        }
+
         protected async Task<T> PostAsync<T>(object request, string uri)
         {
+#if DEBUG
+            string requestCmd = JsonConvert.SerializeObject(request, Formatting.Indented);
+#else
             string requestCmd = JsonConvert.SerializeObject(request);
+#endif
 
             string response;
 
@@ -91,6 +114,12 @@ namespace Facebook.Messaging
             {
                 req.Content = new StringContent(requestCmd, Encoding.UTF8, "application/json");
                 response = await (await httpClient.SendAsync(req)).Content.ReadAsStringAsync();
+            }
+
+            var errorContainer = JsonConvert.DeserializeObject<ApiErrorContainer>(response);
+            if (errorContainer.Error != null)
+            {
+                throw new FacebookException(errorContainer.Error);
             }
 
             T res = JsonConvert.DeserializeObject<T>(response);
