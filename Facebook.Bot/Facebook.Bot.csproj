@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Facebook.Messaging\Facebook.Messaging.csproj" />
+    <ProjectReference Include="..\Facebook.Webhook\Facebook.Webhook.csproj" />
+  </ItemGroup>
+
+</Project>
