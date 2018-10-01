@@ -94,7 +94,7 @@ namespace Facebook.Tests
                 Payload = "webhook_value_2"
             });
 
-            var defaultAction = new GenericTemplate.Element.Action()
+            var defaultAction = new ElementAction()
             {
                 Url = "https://m.me/",            
             };
@@ -126,6 +126,52 @@ namespace Facebook.Tests
             };
 
             string result = client.SendAttachment<Attachment<GenericTemplate>>(UserId, attachment).Result;
+            Trace.WriteLine($"Message Id: {result}");
+        }
+
+        [TestMethod]
+        public void ListTemplateTest()
+        {
+            var buttons = new List<IButton>();
+            buttons.Add(new PostbackButton()
+            {
+                Title = "Button 1",
+                Payload = "webhook_value_1"
+            });
+
+            var defaultAction = new ElementAction()
+            {
+                Url = "https://m.me/",
+                
+            };
+
+            var elements = new List<ListTemplate.Element>();
+            elements.Add(new ListTemplate.Element()
+            {
+                Title = "Title 1",
+                Subtitle = "Subtitle 1",
+                ImageUrl = "",
+                DefaultAction = defaultAction,
+                Buttons = buttons
+            });
+
+            elements.Add(new ListTemplate.Element()
+            {
+                Title = "Title 2",
+                Subtitle = "Subtitle 2",
+                ImageUrl = "",
+                Buttons = buttons
+            });
+
+            var attachment = new Attachment<ListTemplate>()
+            {
+                Payload = new ListTemplate()
+                {
+                    Elements = elements
+                }
+            };
+
+            string result = client.SendAttachment<Attachment<ListTemplate>>(UserId, attachment).Result;
             Trace.WriteLine($"Message Id: {result}");
         }
 

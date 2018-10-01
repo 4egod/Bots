@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System;
 
 namespace Facebook.Messaging.Templates
 {
@@ -9,20 +10,7 @@ namespace Facebook.Messaging.Templates
     {
         public class Element
         {
-            public class Action
-            {
-                [JsonProperty("type")]
-                public const string Type = "web_url";
-
-                [JsonProperty("url")]
-                public string Url { get; set; }
-
-                [JsonProperty("messenger_extensions")]
-                public bool MessengerExtensions { get; set; }
-
-                [JsonProperty("webview_height_ratio")]
-                public WebViewHeightRatio WebViewHeightRatio { get; set; }
-            }
+            private List<IButton> buttons;
 
             [JsonProperty("title")]
             public string Title { get; set; }
@@ -34,10 +22,25 @@ namespace Facebook.Messaging.Templates
             public string ImageUrl { get; set; }
 
             [JsonProperty("default_action")]
-            public Action DefaultAction { get; set; }
+            public ElementAction DefaultAction { get; set; }
 
             [JsonProperty("buttons")]
-            public List<IButton> Buttons { get; set; }
+            public List<IButton> Buttons
+            {
+                get => buttons;
+
+                set
+                {
+                    if (value.Count > MaxButtonsCount || value.Count <= 0)
+                    {
+                        throw new ArgumentException(nameof(Buttons));
+                    }
+
+                    buttons = value;
+                }
+            }
+
+            protected virtual int MaxButtonsCount => 3;
         }
 
         public override TemplateTypes TemplateType => TemplateTypes.Generic;
