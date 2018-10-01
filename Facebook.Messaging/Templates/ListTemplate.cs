@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 
 namespace Facebook.Messaging.Templates
 {
+    using Buttons;
+
     public class ListTemplate : BaseTemplate
     {
         public class Element : GenericTemplate.Element
@@ -27,7 +29,13 @@ namespace Facebook.Messaging.Templates
         [JsonProperty("top_element_style")]
         public ElementStyle TopElementStyle { get; set; }
 
+        [JsonProperty("buttons")]
+        public List<IButton> Buttons { get; set; }
+
         [JsonProperty("elements")]
         public List<Element> Elements { get; set; }
+
+        [JsonProperty("sharable")]
+        public bool Sharable { get; set; }
     }
 }

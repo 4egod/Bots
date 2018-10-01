@@ -167,7 +167,8 @@ namespace Facebook.Tests
             {
                 Payload = new ListTemplate()
                 {
-                    Elements = elements
+                    Elements = elements,
+                    Buttons = buttons
                 }
             };
 
