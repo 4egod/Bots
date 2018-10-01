@@ -20,7 +20,9 @@ namespace Facebook.Messaging
             httpClient = new HttpClient();
         }
 
-        public string ApiUri => $"https://graph.facebook.com/v{ApiVersion}/me/messages?access_token={PageToken}";
+        public string SendApiUri => $"https://graph.facebook.com/v{ApiVersion}/me/messages?access_token={PageToken}";
+
+        public string MessengerProfileApiUri => $"https://graph.facebook.com/v{ApiVersion}/me/messenger_profile?access_token={PageToken}";
 
         public string PageToken { get; private set; }
 
@@ -45,7 +47,7 @@ namespace Facebook.Messaging
                 message = message
             };
 
-            var response = await PostAsync<Response>(container, ApiUri);
+            var response = await PostAsync<Response>(container, SendApiUri);
             return response.message_id;
         }
 
@@ -82,7 +84,7 @@ namespace Facebook.Messaging
             return await SendMessageAsync(userId, message, qrl);
         }
 
-
+        //public 
 
         public async Task<string> SendAttachment<T>(ulong userId, T attachment)
         {
@@ -94,7 +96,7 @@ namespace Facebook.Messaging
                 message = message
             };
 
-            var response = await PostAsync<Response>(container, ApiUri);
+            var response = await PostAsync<Response>(container, SendApiUri);
             return response.message_id;
         }
 

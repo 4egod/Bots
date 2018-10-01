@@ -24,7 +24,7 @@ namespace Facebook.Tests
         [TestMethod]
         public void ApiUriTest()
         {
-            string result = client.ApiUri;
+            string result = client.SendApiUri;
             Trace.WriteLine($"ApiUri: {result}");
         }
 
