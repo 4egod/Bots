@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.18.10.1</Version>
+    <Authors>Dmitry Tarasov</Authors>
+    <Product>Messenger Platform</Product>
+    <Copyright>Copyright (C) Dmitry Tarasov, 2018</Copyright>
+    <PackageProjectUrl>https://github.com/4egod/facebook</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/4egod/facebook.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>facebook messenger platform bot api sdk</PackageTags>
+    <RootNamespace>Messenger</RootNamespace>
+    <PackageIconUrl>Messenger.png</PackageIconUrl>
+    <Description>.NET Implementation of Facebook Messenger Platform.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Messenger.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Messenger.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Webhook\" />
+  </ItemGroup>
+
+</Project>
