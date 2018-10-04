@@ -7,12 +7,12 @@
     <Authors>Dmitry Tarasov</Authors>
     <Product>Messenger Platform</Product>
     <Copyright>Copyright (C) Dmitry Tarasov, 2018</Copyright>
-    <PackageProjectUrl>https://github.com/4egod/facebook</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/4egod/facebook.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/4egod/Messenger.Platform</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/4egod/Messenger.Platform.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>facebook messenger platform bot api sdk</PackageTags>
+    <PackageTags>facebook, messenger, platform, bot, bots, api, sdk</PackageTags>
     <RootNamespace>Messenger</RootNamespace>
-    <PackageIconUrl>Messenger.png</PackageIconUrl>
+    <PackageIconUrl>https://github.com/4egod/Messenger.Platform/raw/master/Messenger.Platform/Messenger.png</PackageIconUrl>
     <Description>.NET Implementation of Facebook Messenger Platform.</Description>
   </PropertyGroup>
 
@@ -30,7 +30,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Webhook\" />
+    <Compile Update="Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources.resx">
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -2,8 +2,8 @@
 
 namespace EchoBot
 {
-    using static Facebook.Consts;
-    using Facebook.Bot;
+    using static Messenger.Consts;
+    using Messenger;
 
     class Program
     {
@@ -11,7 +11,7 @@ namespace EchoBot
         {
             Console.WriteLine("Starting...");
 
-            BotClient bot = new BotClient(AppSecret, PageToken, VerifyToken);
+            MessengerBot bot = new MessengerBot(AppSecret, PageToken, VerifyToken);
             bot.StartAsync();
             bot.WaitForShutdown();
         }

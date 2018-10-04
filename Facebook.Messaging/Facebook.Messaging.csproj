@@ -17,8 +17,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Facebook.Core\Facebook.Core.csproj" />
-  </ItemGroup>
-
 </Project>

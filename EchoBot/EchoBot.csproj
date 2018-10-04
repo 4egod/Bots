@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Facebook.Tests\Consts.cs" Link="Consts.cs" />
+    <Compile Include="..\Messenger.Tests\Consts.cs" Link="Consts.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Facebook.Bot\Facebook.Bot.csproj" />
+    <ProjectReference Include="..\Messenger.Platform\Messenger.Platform.csproj" />
   </ItemGroup>
 
 </Project>

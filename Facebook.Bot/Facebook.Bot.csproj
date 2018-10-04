@@ -13,9 +13,4 @@
     <PackageTags>facebook messenger bot api sdk</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Facebook.Messaging\Facebook.Messaging.csproj" />
-    <ProjectReference Include="..\Facebook.Webhook\Facebook.Webhook.csproj" />
-  </ItemGroup>
-
 </Project>
