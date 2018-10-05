@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace Messenger.ProfileAPI
 {
+    using Menu;
+
     public class ProfileClient : BaseApiClient
     {
         public ProfileClient(string pageToken) : base(pageToken)
@@ -43,6 +45,13 @@ namespace Messenger.ProfileAPI
             };
 
             Result result = await PostAsync<Result>(container, ApiUri);
+
+            return result.IsOk;
+        }
+
+        public async Task<bool> SetPersistentMenu(PersistentMenu menu)
+        {
+            Result result = await PostAsync<Result>(menu, ApiUri);
 
             return result.IsOk;
         }

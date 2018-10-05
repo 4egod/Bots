@@ -1,12 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Messenger.Tests
 {
-    using static Consts;
+    using Menu;
     using ProfileAPI;
-    using System.Diagnostics;
-    using System;
-    using System.Globalization;
+    using static Consts;
 
     [TestClass]
     public class ProfileClientTests
@@ -30,6 +31,32 @@ namespace Messenger.Tests
         public void SetGreetingTest()
         {
             bool result = client.SetGreeting("Custom Welocome String!").Result;
+            Trace.WriteLine(("Success: {0}".Format(result)));
+        }
+
+        [TestMethod]
+        public void SetPersistentMenuTest()
+        {
+            LocalizedMenuItem lmi = new LocalizedMenuItem();
+            lmi.Locale = LocalizedMenuItem.DefaultLocale;
+            lmi.Items = new List<IMenuItem>();
+
+            NestedMenuItem nested = new NestedMenuItem()
+            {
+                Title = "My Account",
+                Items = new List<IMenuItem>()
+            };
+
+            nested.Items.Add(new PostbackMenuItem() { Title = "Pay Bill", Payload = "PAYBILL_PAYLOAD" });
+            nested.Items.Add(new UrlMenuItem() { Title = "Latest News", Url = "https://www.messenger.com/" });
+
+            lmi.Items.Add(nested);
+
+            PersistentMenu menu = new PersistentMenu();
+            menu.Items = new List<LocalizedMenuItem>();
+            menu.Items.Add(lmi);
+
+            bool result = client.SetPersistentMenu(menu).Result;
             Trace.WriteLine(("Success: {0}".Format(result)));
         }
     }
