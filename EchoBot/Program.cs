@@ -7,16 +7,29 @@ namespace EchoBot
 
     class Program
     {
+        static MessengerBot bot = new MessengerBot(AppSecret, PageToken, VerifyToken);
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Starting...");
+            Console.WriteLine("Starting the bot...");
 
-            MessengerBot bot = new MessengerBot(AppSecret, PageToken, VerifyToken);
+            SetupBotProfile();
+
             bot.StartReceivingAsync();
 
-            bot.SendMessageAsync(UserId, "Test message").Wait();
+            SendMessages();
 
             bot.WaitForShutdown();
+        }
+
+        static async void SetupBotProfile()
+        {
+            await bot.SetStartButtonPostback("#get_started_button_postback#");
+        }
+
+        static async void SendMessages()
+        {
+            await bot.SendMessageAsync(UserId, "Test message");
         }
     }
 }

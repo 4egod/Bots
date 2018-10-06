@@ -32,7 +32,20 @@ namespace Messenger
             base.StartAsync();
         }
 
-        
+
+        public async Task<bool> SetStartButtonPostback(string payload)
+        {
+            try
+            {
+                return await profileClient.SetStartButtonPostback(payload);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return false;
+            }
+        }
+
 
         public async Task<MessageResult> SendMessageAsync(ulong userId, string text)
         {
