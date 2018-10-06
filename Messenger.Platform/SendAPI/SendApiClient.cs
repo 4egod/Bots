@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Messenger.SendAPI
 {
-    public class SendClient : BaseApiClient
+    public class SendApiClient : BaseApiClient
     {
-        public SendClient(string pageToken) : base(pageToken)
+        public SendApiClient(string pageToken) : base(pageToken)
         {
         }
 

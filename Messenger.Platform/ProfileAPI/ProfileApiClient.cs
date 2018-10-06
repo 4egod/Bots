@@ -7,9 +7,9 @@ namespace Messenger.ProfileAPI
 {
     using Menu;
 
-    public class ProfileClient : BaseApiClient
+    public class ProfileApiClient : BaseApiClient
     {
-        public ProfileClient(string pageToken) : base(pageToken)
+        public ProfileApiClient(string pageToken) : base(pageToken)
         {
         }
 

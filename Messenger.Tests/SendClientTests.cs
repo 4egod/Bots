@@ -13,12 +13,12 @@ namespace Messenger.Tests
     [TestClass]
     public class SendClientTests
     {
-        private SendClient client;
+        private SendApiClient client;
 
         [TestInitialize]
         public void Intitialize()
         {
-            client = new SendClient(PageToken);
+            client = new SendApiClient(PageToken);
         }
 
         [TestMethod]

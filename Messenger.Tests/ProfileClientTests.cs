@@ -12,12 +12,12 @@ namespace Messenger.Tests
     [TestClass]
     public class ProfileClientTests
     {
-        private ProfileClient client;
+        private ProfileApiClient client;
 
         [TestInitialize]
         public void Intitialize()
         {
-            client = new ProfileClient(PageToken);
+            client = new ProfileApiClient(PageToken);
         }
 
         [TestMethod]
