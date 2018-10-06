@@ -2,8 +2,8 @@
 
 namespace Messenger
 {
-    public class FacebookException : Exception
+    public class ApiException : Exception
     {
-        public FacebookException(ApiError error) : base($"[{error.Type}:{error.Code}]: {error.Message}") { }
+        public ApiException(ApiError error) : base($"[{error.Type}:{error.Code}]: {error.Message}") { }
     }
 }

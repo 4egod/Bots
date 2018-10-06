@@ -1,6 +1,6 @@
 ﻿namespace Messenger
 {
-    public static class ContentTypes
+    internal static class ContentTypes
     {
         public static string TextHtml => "text/html";
 

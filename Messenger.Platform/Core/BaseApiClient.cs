@@ -57,7 +57,7 @@ namespace Messenger
             var errorContainer = JsonConvert.DeserializeObject<ApiErrorContainer>(response);
             if (errorContainer.Error != null)
             {
-                throw new FacebookException(errorContainer.Error);
+                throw new ApiException(errorContainer.Error);
             }
 
             T res = JsonConvert.DeserializeObject<T>(response);
