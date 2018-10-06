@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Messenger
 {
-    using Microsoft.Extensions.Logging;
+    using Menu;
     using ProfileAPI;
     using SendAPI;
 
     public class MessengerBot : Webhook.WebhookServer
     {
       
-        private ProfileClient profileClient;
-        private SendClient sendClient;
+        private ProfileApiClient profileClient;
+        private SendApiClient sendClient;
 
         public MessengerBot(string appSecret, string pageToken, string verifyToken) : this(80, appSecret, pageToken, verifyToken) { }
 
         public MessengerBot(int webhookPort, string appSecret, string pageToken, string verifyToken) : base(webhookPort, appSecret, verifyToken)
         {
             PageToken = pageToken;
-            profileClient = new ProfileClient(pageToken);
-            sendClient = new SendClient(pageToken);
+            profileClient = new ProfileApiClient(pageToken);
+            sendClient = new SendApiClient(pageToken);
 
         }
 
@@ -31,6 +32,7 @@ namespace Messenger
         {
             base.StartAsync();
         }
+
 
 
         public async Task<bool> SetStartButtonPostback(string payload)
@@ -45,6 +47,33 @@ namespace Messenger
                 return false;
             }
         }
+
+        public async Task<bool> SetGreeting(string text)
+        {
+            try
+            {
+                return await profileClient.SetGreeting(text);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> SetPersistentMenu(PersistentMenu menu)
+        {
+            try
+            {
+                return await profileClient.SetPersistentMenu(menu);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return false;
+            }
+        }
+
 
 
         public async Task<MessageResult> SendMessageAsync(ulong userId, string text)
@@ -148,8 +177,7 @@ namespace Messenger
         }
 
 
-
-
+        
         private new void StartAsync()
         {
             throw new NotSupportedException();
