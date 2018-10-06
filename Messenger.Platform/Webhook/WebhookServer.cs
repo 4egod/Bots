@@ -43,7 +43,7 @@ namespace Messenger.Webhook
 
         public string VerifyToken { get; private set; }
 
-        public virtual async void StartAsync()
+        public async void StartAsync()
         {
             await Task.Run(() =>
             {

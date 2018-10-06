@@ -27,10 +27,12 @@ namespace Messenger
 
         public string PageToken { get; set; }
 
-        public override void StartAsync()
+        public void StartReceivingAsync()
         {
             base.StartAsync();
         }
+
+        
 
         public async Task<MessageResult> SendMessageAsync(ulong userId, string text)
         {
@@ -114,28 +116,31 @@ namespace Messenger
             }
         }
 
-        //public async Task<MessageResult> SendAttachment<T>(ulong userId, T attachment) where T : IAttachment
-        //{
-        //    return await SendAttachment<T>(userId.ToString(), attachment);
-        //}
+        public async Task<MessageResult> SendAttachment<T>(ulong userId, Attachment<T> attachment) where T : IAttachment
+        {
+            return await SendAttachment<T>(userId.ToString(), attachment);
+        }
 
-        //public async Task<MessageResult> SendAttachment<T>(string userId, T attachment) where T: IAttachment
-        //{
-        //    try
-        //    {
-        //        return await sendClient.SendAttachment<T>(userId, attachment);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.LogError(e, e.Message);
-        //        return MessageResult.Failed;
-        //    }
-        //}
-
-
+        public async Task<MessageResult> SendAttachment<T>(string userId, Attachment<T> attachment) where T : IAttachment
+        {
+            try
+            {
+                return await sendClient.SendAttachment<T>(userId, attachment);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return MessageResult.Failed;
+            }
+        }
 
 
 
+
+        private new void StartAsync()
+        {
+            throw new NotSupportedException();
+        }
 
 
     }

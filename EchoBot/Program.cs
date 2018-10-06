@@ -12,7 +12,7 @@ namespace EchoBot
             Console.WriteLine("Starting...");
 
             MessengerBot bot = new MessengerBot(AppSecret, PageToken, VerifyToken);
-            bot.StartAsync();
+            bot.StartReceivingAsync();
 
             bot.SendMessageAsync(UserId, "Test message").Wait();
 

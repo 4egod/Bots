@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.18.10.4</Version>
+    <Version>0.18.10.6</Version>
     <Authors>Dmitry Tarasov</Authors>
     <Product>Messenger Platform</Product>
     <Copyright>Copyright (C) Dmitry Tarasov, 2018</Copyright>
@@ -13,7 +13,18 @@
     <PackageTags>facebook, messenger, platform, bot, bots, api, sdk</PackageTags>
     <RootNamespace>Messenger</RootNamespace>
     <PackageIconUrl>https://github.com/4egod/Messenger.Platform/raw/master/Messenger.Platform/Messenger.png</PackageIconUrl>
-    <Description>.NET Implementation of Facebook Messenger Platform.</Description>
+    <Description>.NET Implementation of Facebook Messenger Platform which is a toolbox for building bots.
+
+Features:
+- Send text messages
+- Send text messages with quick replies
+- Send message templates
+- Setup bot profile (greeting etc.)
+- Parse messages received on your webhook
+
+Platform Supports:
+- .NET Standard 2.0
+- .NET Core 2.1</Description>
   </PropertyGroup>
 
   <ItemGroup>
