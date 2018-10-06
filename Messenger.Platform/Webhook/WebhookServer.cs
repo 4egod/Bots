@@ -21,7 +21,7 @@ namespace Messenger.Webhook
         public const string WebhookPath = "webhook"; // http://host:port/webhook
         public const string WebhookTestPath = "test"; // http://host:port/test
 
-        private int port;
+        //private int port;
         private IWebHost host;
         private ILogger logger;
         private int _eventId = 1;
@@ -30,18 +30,20 @@ namespace Messenger.Webhook
 
         public WebhookServer(int port, string appSecret, string verifyToken)
         {
-            this.port = port;
+            Port = port;
             AppSecret = appSecret;
             VerifyToken = verifyToken;
         }
 
         public ILogger Logger => logger ?? throw new InvalidOperationException(Resources.YouShouldStartInstance);
 
+        public int Port { get; private set; }
+
         public string AppSecret { get; private set; }
 
         public string VerifyToken { get; private set; }
 
-        public async void StartAsync()
+        public virtual async void StartAsync()
         {
             await Task.Run(() =>
             {
@@ -61,7 +63,7 @@ namespace Messenger.Webhook
 
                 builder.UseKestrel(options =>
                 {
-                    options.Listen(IPAddress.Any, port);
+                    options.Listen(IPAddress.Any, Port);
                 });
 
                 builder.Configure(cfg =>
@@ -75,7 +77,7 @@ namespace Messenger.Webhook
                 });
 
                 host = builder.Build();
-                logger = host.Services.GetService<ILoggerFactory>().CreateLogger(this.GetType().ToString() + $"[{IPAddress.Any}:{port}]");
+                logger = host.Services.GetService<ILoggerFactory>().CreateLogger(this.GetType().ToString() + $"[{IPAddress.Any}:{Port}]");
 
                 host.Run();
             });
@@ -90,6 +92,10 @@ namespace Messenger.Webhook
 
             host.WaitForShutdown();
         }
+
+        public delegate Task PostHandler(PostEventArgs e);
+
+        public event PostHandler OnPost;
 
         private async Task Test(HttpRequest request, HttpResponse response, RouteData route)
         {
@@ -162,7 +168,9 @@ namespace Messenger.Webhook
                     return;
                 }
 #endif
-                ProcessRequest(body);
+                await OnPost?.Invoke(new PostEventArgs() { Body = body });
+
+                await ProcessRequest(body);
             }
             catch (Exception e)
             {
@@ -179,9 +187,9 @@ namespace Messenger.Webhook
             }
         }
 
-        private void ProcessRequest(string body)
+        private async Task ProcessRequest(string body)
         {
-            var o = JsonConvert.DeserializeObject<Webhook.Event>(body);
+            //var o = JsonConvert.DeserializeObject<Webhook.Event>(body);
         }
     }
 }

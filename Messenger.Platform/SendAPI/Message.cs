@@ -5,15 +5,19 @@ namespace Messenger.SendAPI
 {
     internal class Message
     {
-        public string text;
-        //public attachment;
-        public List<QuickReply> quick_replies;
-        public string metadata;
+        [JsonProperty("text")]
+        public string Text { get; set; }
+
+        [JsonProperty("quick_replies")]
+        public List<QuickReply> QuickReplies;
+
+        [JsonProperty("metadata")]
+        public string Metadata;
     }
 
-    internal class Message<T> : Message
+    internal class Message<T> : Message where T : IAttachment
     {
         [JsonProperty("attachment")]
-        public T Attachment { get; set; }
+        public Attachment<T> Attachment { get; set; }
     }
 }

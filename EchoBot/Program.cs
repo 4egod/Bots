@@ -13,6 +13,9 @@ namespace EchoBot
 
             MessengerBot bot = new MessengerBot(AppSecret, PageToken, VerifyToken);
             bot.StartAsync();
+
+            bot.SendMessageAsync(UserId, "Test message").Wait();
+
             bot.WaitForShutdown();
         }
     }

@@ -2,11 +2,11 @@
 
 namespace Messenger.ProfileAPI
 {
-    internal class Result
+    internal class OperationResult
     {
         [JsonProperty("result")]
         public string Value { get; set; }
 
-        public bool IsOk => Value == "success";
+        public bool Result => Value == "success";
     }
 }

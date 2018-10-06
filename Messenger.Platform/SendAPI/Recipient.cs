@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Messenger.SendAPI
 {
     internal struct Recipient
     {
-        public string id;
-        public string phone_number;
-        public string user_ref;
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("phone_number")]
+        public string PhoneNumber;
+
+        [JsonProperty("user_ref")]
+        public string UserRef;
     }
 }

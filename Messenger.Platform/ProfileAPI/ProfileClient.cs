@@ -25,9 +25,9 @@ namespace Messenger.ProfileAPI
                 }
             };
 
-            Result result = await PostAsync<Result>(container, ApiUri);
+            OperationResult result = await PostAsync<OperationResult>(container, ApiUri);
 
-            return result.IsOk;
+            return result.Result;
         }
 
         public async Task<bool> SetGreeting(string text)
@@ -44,16 +44,16 @@ namespace Messenger.ProfileAPI
                 Values = values
             };
 
-            Result result = await PostAsync<Result>(container, ApiUri);
+            OperationResult result = await PostAsync<OperationResult>(container, ApiUri);
 
-            return result.IsOk;
+            return result.Result;
         }
 
         public async Task<bool> SetPersistentMenu(PersistentMenu menu)
         {
-            Result result = await PostAsync<Result>(menu, ApiUri);
+            OperationResult result = await PostAsync<OperationResult>(menu, ApiUri);
 
-            return result.IsOk;
+            return result.Result;
         }
 
         //private string BuildGetApiUri(FileldTypes fields)

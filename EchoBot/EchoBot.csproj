@@ -13,4 +13,10 @@
     <ProjectReference Include="..\Messenger.Platform\Messenger.Platform.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="start.cmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
