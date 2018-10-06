@@ -1,4 +1,4 @@
-﻿namespace Messenger.SendAPI
+﻿namespace Messenger
 {
     public interface IAttachment
     {

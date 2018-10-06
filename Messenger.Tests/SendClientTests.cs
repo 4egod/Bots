@@ -31,7 +31,7 @@ namespace Messenger.Tests
         [TestMethod]
         public void SendMessageTest()
         {
-            string result = client.SendMessageAsync(UserId, "Test message").Result;
+            string result = client.SendMessageAsync(UserId.ToString(), "Test message").Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
 
@@ -53,28 +53,28 @@ namespace Messenger.Tests
                 QuickReplyType = QuickReplyTypes.Text
             });
 
-            string result = client.SendMessageAsync(UserId, "Message with quick replies", qrl).Result;
+            string result = client.SendMessageAsync(UserId.ToString(), "Message with quick replies", qrl).Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
         
         [TestMethod]
         public void RequestUserLocationTest()
         {
-            string result = client.RequestUserLocationAsync(UserId, "Your location:").Result;
+            string result = client.RequestUserLocationAsync(UserId.ToString(), "Your location:").Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
 
         [TestMethod]
         public void RequestUserPhoneTest()
         {
-            string result = client.RequestUserPhoneNumberAsync(UserId, "Your Phone Number:").Result;
+            string result = client.RequestUserPhoneNumberAsync(UserId.ToString(), "Your Phone Number:").Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
 
         [TestMethod]
         public void RequestUserEmailTest()
         {
-            string result = client.RequestUserEmailAsync(UserId, "Your Email:").Result;
+            string result = client.RequestUserEmailAsync(UserId.ToString(), "Your Email:").Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
 
@@ -125,7 +125,9 @@ namespace Messenger.Tests
                 }
             };
 
-            string result = client.SendAttachment<Attachment<GenericTemplate>>(UserId, attachment).Result;
+            //client.SendAttachment<LogInButton>("asd", new LogInButton());
+
+            string result = client.SendAttachment<GenericTemplate>(UserId.ToString(), attachment).Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
 
@@ -172,7 +174,7 @@ namespace Messenger.Tests
                 }
             };
 
-            string result = client.SendAttachment<Attachment<ListTemplate>>(UserId, attachment).Result;
+            string result = client.SendAttachment<ListTemplate>(UserId.ToString(), attachment).Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
 
@@ -207,7 +209,7 @@ namespace Messenger.Tests
                 }
             };
 
-            string result = client.SendAttachment<Attachment<ButtonTemplate>>(UserId, attachment).Result;
+            string result = client.SendAttachment<ButtonTemplate>(UserId.ToString(), attachment).Result.MessageId;
             Trace.WriteLine($"Message Id: {result}");
         }
 

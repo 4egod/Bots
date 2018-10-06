@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Messenger.SendAPI
+namespace Messenger
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AttachmentTypes

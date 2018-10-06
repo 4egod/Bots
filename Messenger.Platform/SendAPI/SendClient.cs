@@ -12,32 +12,33 @@ namespace Messenger.SendAPI
 
         public override string ApiUri => $"https://graph.facebook.com/v{ApiVersion}/me/messages?access_token={PageToken}";
 
-        public async Task<string> SendMessageAsync(ulong userId, string text)
+        public async Task<MessageResult> SendMessageAsync(string userId, string text)
         {
             return await SendMessageAsync(userId, text, null);
         }
 
-        public async Task<string> SendMessageAsync(ulong userId, string text, List<QuickReply> quickReplies)
+        public async Task<MessageResult> SendMessageAsync(string userId, string text, List<QuickReply> quickReplies)
         {
             if (text == null)
             {
                 throw new NullReferenceException(nameof(text));
             }
 
-            Recipient recipient = new Recipient() { id = userId.ToString() };
-            Message message = new Message() { text = text };
-            message.quick_replies = quickReplies;
+            Recipient recipient = new Recipient() { Id = userId };
+            Message message = new Message() { Text = text };
+            message.QuickReplies = quickReplies;
             MessageContainer container = new MessageContainer()
             {
                 recipient = recipient,
                 message = message
             };
 
-            var response = await PostAsync<Response>(container, ApiUri);
-            return response.message_id;
+            var response = await PostAsync<MessageResult>(container, ApiUri);
+
+            return response;
         }
 
-        public async Task<string> RequestUserLocationAsync(ulong userId, string message)
+        public async Task<MessageResult> RequestUserLocationAsync(string userId, string message)
         {
             List<QuickReply> qrl = new List<QuickReply>();
             qrl.Add(new QuickReply()
@@ -48,7 +49,7 @@ namespace Messenger.SendAPI
             return await SendMessageAsync(userId, message, qrl);
         }
 
-        public async Task<string> RequestUserPhoneNumberAsync(ulong userId, string message)
+        public async Task<MessageResult> RequestUserPhoneNumberAsync(string userId, string message)
         {
             List<QuickReply> qrl = new List<QuickReply>();
             qrl.Add(new QuickReply()
@@ -59,7 +60,7 @@ namespace Messenger.SendAPI
             return await SendMessageAsync(userId, message, qrl);
         }
 
-        public async Task<string> RequestUserEmailAsync(ulong userId, string message)
+        public async Task<MessageResult> RequestUserEmailAsync(string userId, string message)
         {
             List<QuickReply> qrl = new List<QuickReply>();
             qrl.Add(new QuickReply()
@@ -70,9 +71,9 @@ namespace Messenger.SendAPI
             return await SendMessageAsync(userId, message, qrl);
         }
 
-        public async Task<string> SendAttachment<T>(ulong userId, T attachment)
+        public async Task<MessageResult> SendAttachment<T>(string userId, Attachment<T> attachment) where T: IAttachment
         {
-            Recipient recipient = new Recipient() { id = userId.ToString() };
+            Recipient recipient = new Recipient() { Id = userId };
             Message<T> message = new Message<T>() { Attachment = attachment };
             MessageContainer container = new MessageContainer()
             {
@@ -80,8 +81,9 @@ namespace Messenger.SendAPI
                 message = message
             };
 
-            var response = await PostAsync<Response>(container, ApiUri);
-            return response.message_id;
+            var response = await PostAsync<MessageResult>(container, ApiUri);
+
+            return response;
         }
 
 
