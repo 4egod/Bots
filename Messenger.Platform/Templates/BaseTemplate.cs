@@ -2,8 +2,6 @@
 
 namespace Messenger.Templates
 {
-    using SendAPI;
-
     public abstract class BaseTemplate : ITemplate
     {
         [JsonIgnore]
