@@ -1,37 +1,72 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace Messenger
 {
     using Menu;
     using ProfileAPI;
     using SendAPI;
+    using BroadcastAPI;
 
     public class MessengerBot : Webhook.WebhookServer
     {
-      
+#if DEBUG
+        public const LogLevel DefaultLogLevel = LogLevel.Debug;
+#else
+        public const LogLevel DefaultLogLevel = LogLevel.Information;
+#endif
+
         private ProfileApiClient profileClient;
         private SendApiClient sendClient;
+        private BroadcastApiClient broadcastClient;
 
-        public MessengerBot(string appSecret, string pageToken, string verifyToken) : this(80, appSecret, pageToken, verifyToken) { }
+        bool isWebhookEnabled;
 
-        public MessengerBot(int webhookPort, string appSecret, string pageToken, string verifyToken) : base(webhookPort, appSecret, verifyToken)
+        public MessengerBot(string pageToken)
         {
+            isWebhookEnabled = false;
+
             PageToken = pageToken;
             profileClient = new ProfileApiClient(pageToken);
             sendClient = new SendApiClient(pageToken);
+            broadcastClient = new BroadcastApiClient(pageToken);
+        }
 
+        public MessengerBot(string appSecret, string pageToken, string verifyToken) :
+            this(80, appSecret, pageToken, verifyToken, DefaultLogLevel)
+        {
+        }
+
+        public MessengerBot(int webhookPort, string appSecret, string pageToken, string verifyToken) :
+            base(webhookPort, appSecret, verifyToken, DefaultLogLevel)
+        {
+        }
+
+        public MessengerBot(int webhookPort, string appSecret, string pageToken, string verifyToken, LogLevel logLevel = DefaultLogLevel) :
+            base(webhookPort, appSecret, verifyToken, logLevel)
+        {
+            isWebhookEnabled = true;
+
+            PageToken = pageToken;
+            profileClient = new ProfileApiClient(pageToken);
+            sendClient = new SendApiClient(pageToken);
+            broadcastClient = new BroadcastApiClient(pageToken);
         }
 
         public string PageToken { get; set; }
 
-        public void StartReceivingAsync()
+        public override void StartReceivingAsync()
         {
-            base.StartAsync();
+            if (!isWebhookEnabled)
+            {
+                throw new InvalidOperationException();
+            }
+
+            base.StartReceivingAsync();
         }
+
 
 
 
@@ -100,7 +135,7 @@ namespace Messenger
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                return MessageResult.Failed;
+                return BaseResult.CreateFailed<MessageResult>();
             }
         }
 
@@ -118,7 +153,7 @@ namespace Messenger
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                return MessageResult.Failed;
+                return BaseResult.CreateFailed<MessageResult>();
             }
         }
 
@@ -136,7 +171,7 @@ namespace Messenger
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                return MessageResult.Failed;
+                return BaseResult.CreateFailed<MessageResult>();
             }
         }
 
@@ -154,7 +189,7 @@ namespace Messenger
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                return MessageResult.Failed;
+                return BaseResult.CreateFailed<MessageResult>();
             }
         }
 
@@ -172,17 +207,81 @@ namespace Messenger
             catch (Exception e)
             {
                 Logger.LogError(e, e.Message);
-                return MessageResult.Failed;
+                return BaseResult.CreateFailed<MessageResult>();
             }
         }
 
-
-        
-        private new void StartAsync()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>
+        /// Broadcast message ID that can be used by <see cref="SendMessageAsync(string, string)"./>
+        /// </returns>
+        public async Task<BroadcastMessageResult> CreateBroadcastMessageAsunc(string text)
         {
-            throw new NotSupportedException();
+            return await CreateBroadcastMessageAsunc(text, null);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="quickReplies"></param>
+        /// <returns>
+        /// 
+        /// </returns>
+        public async Task<BroadcastMessageResult> CreateBroadcastMessageAsunc(string text, List<QuickReply> quickReplies)
+        {
+            try
+            {
+                return await broadcastClient.CreateMessageAsunc(text, quickReplies);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return BaseResult.CreateFailed<BroadcastMessageResult>();
+            }
+        }
+
+        public async Task<BroadcastResult> BroadcastMessageAsync(BroadcastMessageResult message, NotificationTypes notification)
+        {
+            try
+            {
+                return await broadcastClient.BroadcastMessageAsync(message, notification);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return BaseResult.CreateFailed<BroadcastResult>();
+            }
+        }
+
+        public async Task<BroadcastResult> BroadcastMessageAsync(BroadcastMessageResult message, NotificationTypes notification, DateTime scheduleTime)
+        {
+            try
+            {
+                return await broadcastClient.BroadcastMessageAsync(message, notification, scheduleTime);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return BaseResult.CreateFailed<BroadcastResult>();
+            }
+        }
+
+        public async Task<bool> CancelScheduledBroadcast(BroadcastResult broadcast)
+        {
+            try
+            {
+                return await broadcastClient.CancelScheduledBroadcast(broadcast);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return false;
+            }
+        }
 
     }
 }

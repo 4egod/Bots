@@ -1,8 +1,10 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using static Messenger.Consts;
 
 namespace EchoBot
 {
-    using static Messenger.Consts;
     using Messenger;
 
     class Program
@@ -15,11 +17,19 @@ namespace EchoBot
 
             SetupBotProfile();
 
+            bot.OnPost += Bot_OnPost;
             bot.StartReceivingAsync();
 
-            SendMessages();
+            //SendMessages();
 
             bot.WaitForShutdown();
+        }
+
+        private async static Task Bot_OnPost(Messenger.Webhook.PostEventArgs e)
+        {
+            Console.WriteLine($"POST: {e.Body}");
+
+            await Task.CompletedTask;
         }
 
         static async void SetupBotProfile()
@@ -30,6 +40,7 @@ namespace EchoBot
         static async void SendMessages()
         {
             await bot.SendMessageAsync(UserId, "Test message");
+
         }
     }
 }

@@ -21,21 +21,27 @@ namespace Messenger.Webhook
         public const string WebhookPath = "webhook"; // http://host:port/webhook
         public const string WebhookTestPath = "test"; // http://host:port/test
 
-        //private int port;
         private IWebHost host;
-        private ILogger logger;
+        private LogLevel logLevel;
         private int _eventId = 1;
 
-        public WebhookServer(string appSecret, string verifyToken) : this(80, appSecret, verifyToken) { }
+        internal WebhookServer()
+        {
+            LoggerFactory factory = new LoggerFactory();
+            factory.AddConsole().AddDebug();
+            Logger = factory.CreateLogger(this.GetType().ToString() + $"[WITHOUT_WEBHOOK]");
+        }
 
-        public WebhookServer(int port, string appSecret, string verifyToken)
+        public WebhookServer(int port, string appSecret, string verifyToken, LogLevel level)
         {
             Port = port;
             AppSecret = appSecret;
             VerifyToken = verifyToken;
+            logLevel = level;
+            CreateWebhookHost();
         }
 
-        public ILogger Logger => logger ?? throw new InvalidOperationException(Resources.YouShouldStartInstance);
+        public ILogger Logger { get; private set; }
 
         public int Port { get; private set; }
 
@@ -43,41 +49,41 @@ namespace Messenger.Webhook
 
         public string VerifyToken { get; private set; }
 
-        public async void StartAsync()
+        public virtual async void StartReceivingAsync()
         {
             await Task.Run(() =>
             {
-                var builder = WebHost.CreateDefaultBuilder();
+                //var builder = WebHost.CreateDefaultBuilder();
 
-                builder.ConfigureServices(cfg =>
-                {
-                    cfg.AddRouting();
-                });
+                //builder.ConfigureServices(cfg =>
+                //{
+                //    cfg.AddRouting();
+                //});
 
-                builder.ConfigureLogging(cfg =>
-                {
-                    //cfg.ClearProviders();
-                    //cfg.AddConsole();
-                    //cfg.AddDebug();
-                });
+                //builder.ConfigureLogging(cfg =>
+                //{
+                //    //cfg.ClearProviders();
+                //    //cfg.AddConsole();
+                //    //cfg.AddDebug();
+                //});
 
-                builder.UseKestrel(options =>
-                {
-                    options.Listen(IPAddress.Any, Port);
-                });
+                //builder.UseKestrel(options =>
+                //{
+                //    options.Listen(IPAddress.Any, Port);
+                //});
 
-                builder.Configure(cfg =>
-                {
-                    cfg.UseRouter(r =>
-                    {
-                        r.MapGet(WebhookTestPath, Test);
-                        r.MapGet(WebhookPath, Get);
-                        r.MapPost(WebhookPath, Post);
-                    });
-                });
+                //builder.Configure(cfg =>
+                //{
+                //    cfg.UseRouter(r =>
+                //    {
+                //        r.MapGet(WebhookTestPath, Test);
+                //        r.MapGet(WebhookPath, Get);
+                //        r.MapPost(WebhookPath, Post);
+                //    });
+                //});
 
-                host = builder.Build();
-                logger = host.Services.GetService<ILoggerFactory>().CreateLogger(this.GetType().ToString() + $"[{IPAddress.Any}:{Port}]");
+                //host = builder.Build();
+                //logger = host.Services.GetService<ILoggerFactory>().CreateLogger(this.GetType().ToString() + $"[{IPAddress.Any}:{Port}]");
 
                 host.Run();
             });
@@ -96,6 +102,42 @@ namespace Messenger.Webhook
         public delegate Task PostHandler(PostEventArgs e);
 
         public event PostHandler OnPost;
+
+        private void CreateWebhookHost()
+        {
+            var builder = WebHost.CreateDefaultBuilder();
+
+            builder.ConfigureServices(cfg =>
+            {
+                cfg.AddRouting();
+            });
+
+            builder.ConfigureLogging(cfg =>
+            {
+                cfg.SetMinimumLevel(logLevel);
+                //cfg.ClearProviders();
+                //cfg.AddConsole();
+                //cfg.AddDebug();
+            });
+
+            builder.UseKestrel(options =>
+            {
+                options.Listen(IPAddress.Any, Port);
+            });
+
+            builder.Configure(cfg =>
+            {
+                cfg.UseRouter(r =>
+                {
+                    r.MapGet(WebhookTestPath, Test);
+                    r.MapGet(WebhookPath, Get);
+                    r.MapPost(WebhookPath, Post);
+                });
+            });
+
+            host = builder.Build();
+            Logger = host.Services.GetService<ILoggerFactory>().CreateLogger(this.GetType().ToString() + $"[{IPAddress.Any}:{Port}]");
+        }
 
         private async Task Test(HttpRequest request, HttpResponse response, RouteData route)
         {
@@ -150,7 +192,7 @@ namespace Messenger.Webhook
                 await request.Body.ReadAsync(buf, 0, buf.Length);
 
                 string body = Encoding.UTF8.GetString(buf);
-                Logger.LogInformation(eventId, Resources.WebhookPost + body);
+                Logger.LogDebug(eventId, Resources.WebhookPost + body);
 #if !DEBUG
                 const string signatureHeader = "X-Hub-Signature";
 
@@ -168,8 +210,11 @@ namespace Messenger.Webhook
                     return;
                 }
 #endif
-                await OnPost?.Invoke(new PostEventArgs() { Body = body });
-
+                if (OnPost != null)
+                {
+                    await OnPost.Invoke(new PostEventArgs() { Body = body });
+                }
+                
                 await ProcessRequest(body);
             }
             catch (Exception e)

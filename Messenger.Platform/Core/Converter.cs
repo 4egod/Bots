@@ -49,5 +49,17 @@ namespace Messenger
         {
             return string.Format(value, args);
         }
+
+        public static int ToUnixTimestamp(this DateTime dateTime)
+        {
+            return (int)(dateTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        }
+
+        public static DateTime FromUnixTimestamp(this int unixTimestamp)
+        {
+            DateTime result = new DateTime(1970, 1, 1);
+            result = result.AddSeconds(unixTimestamp);
+            return result;
+        }
     }
 }

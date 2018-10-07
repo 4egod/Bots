@@ -2,17 +2,15 @@
 
 namespace Messenger
 {
-    public struct MessageResult
+    public class MessageResult : BaseResult
     {
+        /// <summary>
+        /// Message Id.
+        /// </summary>
+        [JsonProperty("message_id")]
+        public override string Id { get; set; }
+
         [JsonProperty("recipient_id")]
         public string RecepientId { get; set; }
-
-        [JsonProperty("message_id")]
-        public string MessageId { get; set; }
-
-        [JsonIgnore]
-        public bool Result => !string.IsNullOrEmpty(MessageId);
-
-        public static MessageResult Failed => new MessageResult();
     }
 }
