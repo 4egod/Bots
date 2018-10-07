@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.18.10.7</Version>
+    <Version>0.18.10.8</Version>
     <Authors>Dmitry Tarasov</Authors>
     <Product>Messenger Platform</Product>
     <Copyright>Copyright (C) Dmitry Tarasov, 2018</Copyright>
@@ -23,20 +23,12 @@ Features:
 - Send message templates
 - Setup bot profile (greeting etc.)
 - Broadcast messages
-- Internal webhook
+- Parse messages received on your webhook
 
 Platform Supports:
 - .NET Standard 2.0
 - .NET Core 2.1</Description>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Messenger.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Messenger.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.3" />
