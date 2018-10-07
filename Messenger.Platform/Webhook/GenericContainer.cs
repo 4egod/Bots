@@ -15,5 +15,8 @@ namespace Messenger.Webhook
 
         [JsonProperty("message")]
         public IncomeMessage Message { get; set; }
+
+        [JsonProperty("postback")]
+        public Postback Postback { get; set; }
     }
 }

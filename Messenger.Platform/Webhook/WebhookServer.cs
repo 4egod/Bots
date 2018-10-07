@@ -103,9 +103,13 @@ namespace Messenger.Webhook
 
         public delegate Task MessageHandler(MessageEventArgs e);
 
+        public delegate Task PostbackHandler(PostbackEventArgs e);
+
         public event PostHandler OnPost;
 
         public event MessageHandler OnMessage;
+
+        public event PostbackHandler OnPostback;
 
         private void CreateWebhookHost()
         {
@@ -244,7 +248,7 @@ namespace Messenger.Webhook
             {
                 foreach (var item in entry.Items)
                 {
-                    if (item.Message != null)
+                    if (item.Message != null && OnMessage != null)
                     {
                         MessageEventArgs messageEventArgs = new MessageEventArgs()
                         {
@@ -252,10 +256,18 @@ namespace Messenger.Webhook
                             Message = item.Message
                         };
 
-                        if (OnMessage != null)
+                        await OnMessage.Invoke(messageEventArgs);
+                    }
+
+                    if (item.Postback != null && OnPostback != null)
+                    {
+                        PostbackEventArgs postbackEventArgs = new PostbackEventArgs()
                         {
-                            await OnMessage.Invoke(messageEventArgs);
-                        }
+                            Sender = item.Sender.Id,
+                            Postback = item.Postback
+                        };
+
+                        await OnPostback.Invoke(postbackEventArgs);
                     }
                 }
             }
