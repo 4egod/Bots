@@ -6,14 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Messenger.Tests\Consts.cs" Link="Consts.cs" />
+    <Compile Include="..\..\Messenger.Tests\Consts.cs" Link="Consts.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Messenger.Platform\Messenger.Platform.csproj" />
+    <ProjectReference Include="..\..\Messenger.Platform\Messenger.Platform.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="start.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="start.cmd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -101,7 +101,11 @@ namespace Messenger.Webhook
 
         public delegate Task PostHandler(PostEventArgs e);
 
+        public delegate Task MessageHandler(MessageEventArgs e);
+
         public event PostHandler OnPost;
+
+        public event MessageHandler OnMessage;
 
         private void CreateWebhookHost()
         {
@@ -234,7 +238,27 @@ namespace Messenger.Webhook
 
         private async Task ProcessRequest(string body)
         {
-            //var o = JsonConvert.DeserializeObject<Webhook.Event>(body);
+            var e = JsonConvert.DeserializeObject<Event>(body);
+
+            foreach (var entry in e.Entries)
+            {
+                foreach (var item in entry.Items)
+                {
+                    if (item.Message != null)
+                    {
+                        MessageEventArgs messageEventArgs = new MessageEventArgs()
+                        {
+                            Sender = item.Sender.Id,
+                            Message = item.Message
+                        };
+
+                        if (OnMessage != null)
+                        {
+                            await OnMessage.Invoke(messageEventArgs);
+                        }
+                    }
+                }
+            }
         }
     }
 }

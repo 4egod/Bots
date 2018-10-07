@@ -20,7 +20,6 @@ namespace SenderBot
         static async void SendMessages()
         {
             await bot.SendMessageAsync(UserId, "Test message");
-
         }
     }
 }

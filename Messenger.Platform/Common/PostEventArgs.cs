@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Messenger.Webhook
+namespace Messenger
 {
     public class PostEventArgs : EventArgs
     {

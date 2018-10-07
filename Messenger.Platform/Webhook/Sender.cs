@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Messenger.Webhook
 {
-    public struct Sender
+    internal struct Sender
     {
-        public string id;
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }

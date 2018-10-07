@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Messenger.Webhook
 {
     internal struct Entry
     {
-        public string id;
-        public long time;
-        public List<MessageContainer> messaging;
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("time")]
+        public long Time { get; set; }
+
+        [JsonProperty("messaging")]
+        public List<GenericContainer> Items { get; set; }
     }
 }
