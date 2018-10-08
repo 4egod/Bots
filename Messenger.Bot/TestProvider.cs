@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Messenger.Tests")]
+[assembly: InternalsVisibleTo("Messenger.Bot.Tests")]

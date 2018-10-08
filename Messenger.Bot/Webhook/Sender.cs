@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Messenger.Webhook
+namespace Messenger.Bot.Webhook
 {
     internal struct Sender
     {

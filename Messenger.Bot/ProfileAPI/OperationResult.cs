@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Messenger.ProfileAPI
+namespace Messenger.Bot.ProfileAPI
 {
     internal class OperationResult
     {

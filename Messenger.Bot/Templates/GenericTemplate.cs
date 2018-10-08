@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Messenger.Templates
+namespace Messenger.Bot.Templates
 {
     using Buttons;
 

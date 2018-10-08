@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Messenger.SendAPI
+namespace Messenger.Bot.SendAPI
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ImageAspectRatio

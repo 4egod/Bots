@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Messenger.BroadcastAPI
+namespace Messenger.Bot.BroadcastAPI
 {
     using Newtonsoft.Json;
     using SendAPI;

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Messenger.ProfileAPI
+namespace Messenger.Bot.ProfileAPI
 {
     using Menu;
 
@@ -55,13 +53,5 @@ namespace Messenger.ProfileAPI
 
             return result.Result;
         }
-
-        //private string BuildGetApiUri(FileldTypes fields)
-        //{
-        //    string fs = fields.ToString().Replace(" ", "");
-        //    string api = "https://graph.facebook.com/v{0}/me/messenger_profile?fields={1}&access_token={2}";
-        //    api = api.Format(ApiVersion, fs, PageToken);
-        //    return api;
-        //}
     }
 }

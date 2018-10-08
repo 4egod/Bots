@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Messenger {
+namespace Messenger.Bot {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Messenger {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Messenger.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Messenger.Bot.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -103,15 +103,6 @@ namespace Messenger {
         internal static string WebhookStatus {
             get {
                 return ResourceManager.GetString("WebhookStatus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You should start instance first..
-        /// </summary>
-        internal static string YouShouldStartInstance {
-            get {
-                return ResourceManager.GetString("YouShouldStartInstance", resourceCulture);
             }
         }
     }

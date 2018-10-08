@@ -6,11 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Messenger.Tests\Consts.cs" Link="Consts.cs" />
+    <Compile Include="..\..\Messenger.Bot.Tests\Consts.cs" Link="Consts.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Messenger.Platform\Messenger.Bot.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Messenger.Bot\Messenger.Bot.csproj" />
   </ItemGroup>
 
   <ItemGroup>

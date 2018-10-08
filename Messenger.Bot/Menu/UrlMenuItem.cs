@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Messenger.Menu
+namespace Messenger.Bot.Menu
 {
     public class UrlMenuItem : IMenuItem
     {

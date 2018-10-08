@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Messenger.Tests
+namespace Messenger.Bot.Tests
 {
     using SendAPI;
     using Buttons;

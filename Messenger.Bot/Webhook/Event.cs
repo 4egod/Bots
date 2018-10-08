@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Messenger.Webhook
+namespace Messenger.Bot.Webhook
 {
     internal struct Event
     {

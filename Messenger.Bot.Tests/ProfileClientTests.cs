@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Messenger.Tests
+namespace Messenger.Bot.Tests
 {
     using Menu;
     using ProfileAPI;

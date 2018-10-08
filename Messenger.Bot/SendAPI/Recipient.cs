@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Messenger.SendAPI
+namespace Messenger.Bot.SendAPI
 {
     internal struct Recipient
     {

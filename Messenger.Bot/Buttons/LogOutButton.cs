@@ -1,4 +1,4 @@
-﻿namespace Messenger.Buttons
+﻿namespace Messenger.Bot.Buttons
 {
     public class LogOutButton : IButton
     {

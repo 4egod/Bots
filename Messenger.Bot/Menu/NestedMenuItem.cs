@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Messenger.Menu
+namespace Messenger.Bot.Menu
 {
     public class NestedMenuItem : IMenuItem
     {

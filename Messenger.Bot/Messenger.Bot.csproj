@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.18.10.8</Version>
     <Authors>Dmitry Tarasov</Authors>
-    <Product>Messenger Platform</Product>
+    <Product>Messenger Platform .NET (Messenger.Bot)</Product>
     <Copyright>Copyright (C) Dmitry Tarasov, 2018</Copyright>
-    <PackageProjectUrl>https://github.com/4egod/Messenger.Platform</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/4egod/Messenger.Platform.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/4egod/Messenger.Bot</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/4egod/Messenger.Bot.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>facebook, messenger, platform, bot, bots, api, sdk</PackageTags>
     <RootNamespace>Messenger.Bot</RootNamespace>
-    <PackageIconUrl>https://github.com/4egod/Messenger.Platform/raw/master/Messenger.Platform/Messenger.png</PackageIconUrl>
+    <PackageIconUrl>https://github.com/4egod/Messenger.Bot/raw/master/Messenger.png</PackageIconUrl>
     <Description>.NET Implementation of Facebook Messenger Platform which is a toolbox for building bots.
 
 Messenger Platform API version: 3.1
@@ -31,7 +31,7 @@ Platform Supports:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 

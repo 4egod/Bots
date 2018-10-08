@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Messenger
+namespace Messenger.Bot
 {
     public abstract class BaseResult
     {

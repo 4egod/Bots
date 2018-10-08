@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Messenger.Templates
+namespace Messenger.Bot.Templates
 {
     public class ElementAction
     {

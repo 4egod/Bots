@@ -2,8 +2,8 @@
 
 namespace SenderBot
 {
-    using static Messenger.Consts;
-    using Messenger;
+    using static Messenger.Bot.Consts;
+    using Messenger.Bot;
 
     class Program
     {

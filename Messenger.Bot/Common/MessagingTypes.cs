@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Messenger
+namespace Messenger.Bot
 {
     /// <summary>
     /// The messaging_type property identifies the messaging type of the message being sent, and is a more explicit way to ensure bots are complying with policies for specific messaging types and respecting people's preferences.

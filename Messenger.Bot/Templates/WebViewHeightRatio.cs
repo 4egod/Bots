@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Messenger.Templates
+namespace Messenger.Bot.Templates
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum  WebViewHeightRatio

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Messenger.ProfileAPI
+namespace Messenger.Bot.ProfileAPI
 {
     internal class Greeting
     {

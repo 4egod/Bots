@@ -133,7 +133,4 @@
     <value>Webhook status: OK
 Your IP: {0}</value>
   </data>
-  <data name="YouShouldStartInstance" xml:space="preserve">
-    <value>You should start instance first.</value>
-  </data>
 </root>

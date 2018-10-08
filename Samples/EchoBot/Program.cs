@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace EchoBot
 {
-    using static Messenger.Consts;
-    using Messenger;
-    
+    using Messenger.Bot;
+    using static Messenger.Bot.Consts;
+
     class Program
     {
         static MessengerBot bot = new MessengerBot(80, AppSecret, PageToken, VerifyToken, LogLevel.Error);
@@ -22,7 +21,7 @@ namespace EchoBot
             bot.WaitForShutdown();
         }
 
-        private async static Task Bot_OnMessage(MessageEventArgs e)
+        private async static void Bot_OnMessage(MessageEventArgs e)
         {
             Console.WriteLine($"\n{e.Sender}:{e.Message.Text}");
 

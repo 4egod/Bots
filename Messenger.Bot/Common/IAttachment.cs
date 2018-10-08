@@ -1,4 +1,4 @@
-﻿namespace Messenger
+﻿namespace Messenger.Bot
 {
     public interface IAttachment
     {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Messenger.BroadcastAPI
+namespace Messenger.Bot
 {
     public class BroadcastMessageResult : BaseResult
     {

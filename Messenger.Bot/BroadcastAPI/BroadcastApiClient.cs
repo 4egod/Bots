@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Messenger.BroadcastAPI
+namespace Messenger.Bot.BroadcastAPI
 {
     public class BroadcastApiClient : BaseApiClient
     {

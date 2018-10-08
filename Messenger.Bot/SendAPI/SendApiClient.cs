@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Messenger.SendAPI
+namespace Messenger.Bot.SendAPI
 {
     public class SendApiClient : BaseApiClient
     {
@@ -29,8 +29,8 @@ namespace Messenger.SendAPI
             message.QuickReplies = quickReplies;
             MessageContainer container = new MessageContainer()
             {
-                recipient = recipient,
-                message = message
+                Recipient = recipient,
+                Message = message
             };
 
             var response = await PostAsync<MessageResult>(container, ApiUri);
@@ -77,8 +77,8 @@ namespace Messenger.SendAPI
             Message<T> message = new Message<T>() { Attachment = attachment };
             MessageContainer container = new MessageContainer()
             {
-                recipient = recipient,
-                message = message
+                Recipient = recipient,
+                Message = message
             };
 
             var response = await PostAsync<MessageResult>(container, ApiUri);

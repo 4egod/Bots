@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Messenger.Menu
+namespace Messenger.Bot.Menu
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum MenuItemTypes

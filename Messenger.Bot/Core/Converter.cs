@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Messenger
+namespace Messenger.Bot
 {
     public static class Converter
     {

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace WebhookDebugBot
 {
-    using static Messenger.Consts;
-    using Messenger;  
+    using Messenger.Bot;
+    using static Messenger.Bot.Consts;
 
     class Program
     {
@@ -24,14 +23,12 @@ namespace WebhookDebugBot
             bot.WaitForShutdown();
         }
 
-        private async static Task Bot_OnPostback(PostbackEventArgs e)
+        private static void Bot_OnPostback(PostbackEventArgs e)
         {
             Console.WriteLine($"\nPOSTBACK:{e.Sender}:{e.Postback.Title}:{e.Postback.Payload}");
-
-            await Task.CompletedTask;
         }
 
-        private async static Task Bot_OnMessage(MessageEventArgs e)
+        private static void Bot_OnMessage(MessageEventArgs e)
         {
             Console.WriteLine($"\nMESSAGE:{e.Sender}:{e.Message.Text}");
 
@@ -39,15 +36,11 @@ namespace WebhookDebugBot
             {
                 Console.WriteLine($"QUICK_REPLY:{e.Message.QuickReply.Payload}");
             }
-
-            await Task.CompletedTask;
         }
 
-        private async static Task Bot_OnPost(PostEventArgs e)
+        private static void Bot_OnPost(PostEventArgs e)
         {
             Console.WriteLine($"\nPOST:\n{e.Body}");
-
-            await Task.CompletedTask;
         }
     }
 }

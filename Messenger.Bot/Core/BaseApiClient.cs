@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Messenger
+namespace Messenger.Bot
 {
     public abstract class BaseApiClient
     {
@@ -46,11 +46,11 @@ namespace Messenger
 
             string response;
 
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentTypes.ApplicationJson));
 
             using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, uri))
             {
-                req.Content = new StringContent(requestCmd, Encoding.UTF8, "application/json");
+                req.Content = new StringContent(requestCmd, Encoding.UTF8, ContentTypes.ApplicationJson);
                 response = await (await httpClient.SendAsync(req)).Content.ReadAsStringAsync();
             }
 

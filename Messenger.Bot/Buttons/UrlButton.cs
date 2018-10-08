@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Messenger.Buttons
+namespace Messenger.Bot.Buttons
 {
     public class UrlButton : IButton
     {

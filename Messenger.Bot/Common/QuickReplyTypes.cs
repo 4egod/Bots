@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace Messenger
+namespace Messenger.Bot
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum QuickReplyTypes

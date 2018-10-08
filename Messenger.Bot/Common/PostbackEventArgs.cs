@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Messenger
+namespace Messenger.Bot
 {
     public class PostbackEventArgs : EventArgs
     {

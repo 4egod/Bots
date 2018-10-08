@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Messenger.Webhook
+namespace Messenger.Bot.Webhook
 {
     public class WebhookServer
     {
@@ -99,11 +99,11 @@ namespace Messenger.Webhook
             host.WaitForShutdown();
         }
 
-        public delegate Task PostHandler(PostEventArgs e);
+        public delegate void PostHandler(PostEventArgs e);
 
-        public delegate Task MessageHandler(MessageEventArgs e);
+        public delegate void MessageHandler(MessageEventArgs e);
 
-        public delegate Task PostbackHandler(PostbackEventArgs e);
+        public delegate void PostbackHandler(PostbackEventArgs e);
 
         public event PostHandler OnPost;
 
@@ -217,13 +217,13 @@ namespace Messenger.Webhook
                     Logger.LogWarning(Resources.InvalidSignature);
                     return;
                 }
-#endif
+#endif          
                 if (OnPost != null)
                 {
-                    await OnPost.Invoke(new PostEventArgs() { Body = body });
+                    ThreadPool.QueueUserWorkItem(state => OnPost.Invoke(new PostEventArgs() { Body = body }));
                 }
-                
-                await ProcessRequest(body);
+
+                ProcessRequest(body);
             }
             catch (Exception e)
             {
@@ -240,7 +240,7 @@ namespace Messenger.Webhook
             }
         }
 
-        private async Task ProcessRequest(string body)
+        private void ProcessRequest(string body)
         {
             var e = JsonConvert.DeserializeObject<Event>(body);
 
@@ -256,7 +256,7 @@ namespace Messenger.Webhook
                             Message = item.Message
                         };
 
-                        await OnMessage.Invoke(messageEventArgs);
+                        ThreadPool.QueueUserWorkItem(state => OnMessage.Invoke(messageEventArgs));
                     }
 
                     if (item.Postback != null && OnPostback != null)
@@ -267,7 +267,7 @@ namespace Messenger.Webhook
                             Postback = item.Postback
                         };
 
-                        await OnPostback.Invoke(postbackEventArgs);
+                        ThreadPool.QueueUserWorkItem(state => OnPostback.Invoke(postbackEventArgs));
                     }
                 }
             }
