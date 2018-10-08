@@ -8,7 +8,7 @@ Messenger.Bot is a .NET implementation of Facebook Messenger Platform which is a
 ### How to use:
 
 ```csharp
-    using Messenger;
+    using Messenger.Bot;
 
     class Program
     {
