@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Messenger
 {
+    using BroadcastAPI;
     using Menu;
     using ProfileAPI;
     using SendAPI;
-    using BroadcastAPI;
 
     public class MessengerBot : Webhook.WebhookServer
     {

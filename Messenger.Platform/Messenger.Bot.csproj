@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.18.10.8</Version>
+    <Version>1.18.10.8</Version>
     <Authors>Dmitry Tarasov</Authors>
     <Product>Messenger Platform</Product>
     <Copyright>Copyright (C) Dmitry Tarasov, 2018</Copyright>
@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/4egod/Messenger.Platform.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>facebook, messenger, platform, bot, bots, api, sdk</PackageTags>
-    <RootNamespace>Messenger</RootNamespace>
+    <RootNamespace>Messenger.Bot</RootNamespace>
     <PackageIconUrl>https://github.com/4egod/Messenger.Platform/raw/master/Messenger.Platform/Messenger.png</PackageIconUrl>
     <Description>.NET Implementation of Facebook Messenger Platform which is a toolbox for building bots.
 
