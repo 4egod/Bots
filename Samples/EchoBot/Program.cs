@@ -14,14 +14,14 @@ namespace EchoBot
         {
             Console.WriteLine("Starting the bot...");
 
-            bot.OnMessage += Bot_OnMessage;
+            bot.MessageReceived += Bot_MessageReceived;
 
             bot.StartReceivingAsync();
 
             bot.WaitForShutdown();
         }
 
-        private async static void Bot_OnMessage(MessageEventArgs e)
+        private async static void Bot_MessageReceived(MessageEventArgs e)
         {
             Console.WriteLine($"\n{e.Sender}:{e.Message.Text}");
 

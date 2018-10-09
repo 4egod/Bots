@@ -20,7 +20,7 @@ Messenger.Bot is a .NET implementation of Facebook Messenger Platform which is a
 
             SetupBotProfile();
 
-            bot.OnMessage += Bot_OnMessage;
+            bot.MessageReceived += Bot_MessageReceived;
             bot.StartReceivingAsync();
 
             SendMessages();
@@ -38,7 +38,7 @@ Messenger.Bot is a .NET implementation of Facebook Messenger Platform which is a
             await bot.SendMessageAsync(UserId, "Test message");
         }
 
-        static void Bot_OnMessage(MessageEventArgs e)
+        static void Bot_MessageReceived(MessageEventArgs e)
         {
             Console.WriteLine($"\nMESSAGE:{e.Sender}:{e.Message.Text}");
 

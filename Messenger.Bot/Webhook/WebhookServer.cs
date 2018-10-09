@@ -105,11 +105,13 @@ namespace Messenger.Bot.Webhook
 
         public delegate void PostbackHandler(PostbackEventArgs e);
 
-        public event PostHandler OnPost;
+        public event PostHandler PostReceived;
 
-        public event MessageHandler OnMessage;
+        public event PostHandler PostFailed;
 
-        public event PostbackHandler OnPostback;
+        public event MessageHandler MessageReceived;
+
+        public event PostbackHandler PostbackReceived;
 
         private void CreateWebhookHost()
         {
@@ -203,10 +205,20 @@ namespace Messenger.Bot.Webhook
                 Logger.LogDebug(eventId, Resources.WebhookPost + body);
 #if !DEBUG
                 const string signatureHeader = "X-Hub-Signature";
-
+                
                 if (!request.Headers.Keys.Contains(signatureHeader))
                 {
                     Logger.LogWarning(Resources.InvalidSignature);
+
+                    if (PostFailed != null)
+                    {
+                        ThreadPool.QueueUserWorkItem(state => PostFailed.Invoke(new PostEventArgs()
+                        {
+                            Headers = request.Headers,
+                            Body = body
+                        }));
+                    }
+
                     return;
                 }
 
@@ -215,12 +227,26 @@ namespace Messenger.Bot.Webhook
                 if (!VerifySignature(signature, buf))
                 {
                     Logger.LogWarning(Resources.InvalidSignature);
+
+                    if (PostFailed != null)
+                    {
+                        ThreadPool.QueueUserWorkItem(state => PostFailed.Invoke(new PostEventArgs()
+                        {
+                            Headers = request.Headers,
+                            Body = body
+                        }));
+                    }
+
                     return;
                 }
 #endif          
-                if (OnPost != null)
+                if (PostReceived != null)
                 {
-                    ThreadPool.QueueUserWorkItem(state => OnPost.Invoke(new PostEventArgs() { Body = body }));
+                    ThreadPool.QueueUserWorkItem(state => PostReceived.Invoke(new PostEventArgs()
+                    {
+                        Headers = request.Headers,
+                        Body = body
+                    }));
                 }
 
                 ProcessRequest(body);
@@ -248,7 +274,7 @@ namespace Messenger.Bot.Webhook
             {
                 foreach (var item in entry.Items)
                 {
-                    if (item.Message != null && OnMessage != null)
+                    if (item.Message != null && MessageReceived != null)
                     {
                         MessageEventArgs messageEventArgs = new MessageEventArgs()
                         {
@@ -256,10 +282,10 @@ namespace Messenger.Bot.Webhook
                             Message = item.Message
                         };
 
-                        ThreadPool.QueueUserWorkItem(state => OnMessage.Invoke(messageEventArgs));
+                        ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
                     }
 
-                    if (item.Postback != null && OnPostback != null)
+                    if (item.Postback != null && PostbackReceived != null)
                     {
                         PostbackEventArgs postbackEventArgs = new PostbackEventArgs()
                         {
@@ -267,7 +293,7 @@ namespace Messenger.Bot.Webhook
                             Postback = item.Postback
                         };
 
-                        ThreadPool.QueueUserWorkItem(state => OnPostback.Invoke(postbackEventArgs));
+                        ThreadPool.QueueUserWorkItem(state => PostbackReceived.Invoke(postbackEventArgs));
                     }
                 }
             }
