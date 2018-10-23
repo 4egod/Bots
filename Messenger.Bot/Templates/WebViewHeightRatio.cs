@@ -10,8 +10,8 @@ namespace Messenger.Bot.Templates
         [EnumMember(Value = "compact")]
         Compact,
 
-        [EnumMember(Value = "tail")]
-        Tail,
+        [EnumMember(Value = "tall")]
+        Tall,
 
         [EnumMember(Value = "full")]
         Full

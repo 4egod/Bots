@@ -16,10 +16,10 @@ namespace Messenger.Bot.BroadcastAPI
 
         public async Task<BroadcastMessageResult> CreateMessageAsync(string text)
         {
-            return await CreateMessageAsunc(text, null);
+            return await CreateMessageAsync(text, null);
         }
 
-        public async Task<BroadcastMessageResult> CreateMessageAsunc(string text, List<QuickReply> quickReplies)
+        public async Task<BroadcastMessageResult> CreateMessageAsync(string text, List<QuickReply> quickReplies)
         {
             BroadcastMessage message = new BroadcastMessage() { Text = text };
             message.QuickReplies = quickReplies;
