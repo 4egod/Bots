@@ -48,7 +48,7 @@ namespace Messenger.Bot.Tests
                 QuickReplyType = QuickReplyTypes.Text
             });
 
-            var result = client.CreateMessageAsunc("Broadcast message with quick replies", qrl).Result;
+            var result = client.CreateMessageAsync("Broadcast message with quick replies", qrl).Result;
             Trace.WriteLine($"Message Id: {result.Id}");
         }
 

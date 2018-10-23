@@ -218,9 +218,9 @@ namespace Messenger.Bot
         /// <returns>
         /// Broadcast message ID that can be used by <see cref="SendMessageAsync(string, string)"./>
         /// </returns>
-        public async Task<BroadcastMessageResult> CreateBroadcastMessageAsunc(string text)
+        public async Task<BroadcastMessageResult> CreateBroadcastMessageAsync(string text)
         {
-            return await CreateBroadcastMessageAsunc(text, null);
+            return await CreateBroadcastMessageAsync(text, null);
         }
 
         /// <summary>
@@ -231,11 +231,11 @@ namespace Messenger.Bot
         /// <returns>
         /// 
         /// </returns>
-        public async Task<BroadcastMessageResult> CreateBroadcastMessageAsunc(string text, List<QuickReply> quickReplies)
+        public async Task<BroadcastMessageResult> CreateBroadcastMessageAsync(string text, List<QuickReply> quickReplies)
         {
             try
             {
-                return await broadcastClient.CreateMessageAsunc(text, quickReplies);
+                return await broadcastClient.CreateMessageAsync(text, quickReplies);
             }
             catch (Exception e)
             {
