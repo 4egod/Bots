@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Messenger.Bot.Templates;
+using Newtonsoft.Json;
 
 namespace Messenger.Bot.Buttons
 {
@@ -11,5 +12,11 @@ namespace Messenger.Bot.Buttons
 
         [JsonProperty("url")]
         public string Url { get; set; }
+
+        [JsonProperty("webview_height_ratio")]
+        public WebViewHeightRatio WebViewHeightRatio { get; set; }
+
+        [JsonProperty("messenger_extensions")]
+        public bool MessengerExtensions { get; set; }
     }
 }
