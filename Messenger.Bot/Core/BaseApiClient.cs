@@ -31,6 +31,12 @@ namespace Messenger.Bot
                 response = await (await httpClient.SendAsync(req)).Content.ReadAsStringAsync();
             }
 
+            var errorContainer = JsonConvert.DeserializeObject<ApiErrorContainer>(response);
+            if (errorContainer.Error != null)
+            {
+                throw new ApiException(errorContainer.Error);
+            }
+
             T res = JsonConvert.DeserializeObject<T>(response);
 
             return res;
