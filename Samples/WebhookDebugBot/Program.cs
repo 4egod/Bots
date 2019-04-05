@@ -8,7 +8,7 @@ namespace WebhookDebugBot
 
     class Program
     {
-        static MessengerBot bot = new MessengerBot(80, AppSecret, PageToken, VerifyToken, LogLevel.Warning);
+        static MessengerBot bot = new MessengerBot(80, AppSecret, PageToken, VerifyToken, LogLevel.Debug);
 
         static void Main(string[] args)
         {
@@ -41,7 +41,7 @@ namespace WebhookDebugBot
 
         private static void Bot_PostFailed(PostEventArgs e)
         {
-            Console.WriteLine($"\nVRONG POST:\n{e.Body}");
+            Console.WriteLine($"\nWRONG POST:\n{e.Body}");
         }
 
         private static void Bot_PostReceived(PostEventArgs e)
