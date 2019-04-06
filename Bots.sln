@@ -22,9 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenderBot", "Samples\Sender
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebhookDebugBot", "Samples\WebhookDebugBot\WebhookDebugBot.csproj", "{1D1F5BCD-275A-49D2-AA0C-1F1C2F6C93C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Twitter", "Twitter\Twitter.Bot\Bots.Twitter.csproj", "{11162A36-D97B-4F7A-9F47-2CFB9B70954F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Twitter", "Twitter\Bots.Twitter\Bots.Twitter.csproj", "{11162A36-D97B-4F7A-9F47-2CFB9B70954F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Twitter.Tests", "Twitter\Twitter.Bot.Tests\Bots.Twitter.Tests.csproj", "{BFA29B9C-6C2E-4B7E-B877-79EBEE080567}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bots.Twitter.Tests", "Twitter\Bots.Twitter.Tests\Bots.Twitter.Tests.csproj", "{BFA29B9C-6C2E-4B7E-B877-79EBEE080567}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Twitter", "Twitter", "{E718369C-8D13-41AA-BA05-B03F959CF0DC}"
 EndProject
