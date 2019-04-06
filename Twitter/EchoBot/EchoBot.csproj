@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Twitter.Bot.Tests\Consts.cs" Link="Consts.cs" />
+    <Compile Include="..\Bots.Twitter.Tests\Consts.cs" Link="Consts.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Twitter.Bot\Bots.Twitter.csproj" />
+    <ProjectReference Include="..\Bots.Twitter\Bots.Twitter.csproj" />
   </ItemGroup>
 
 </Project>
