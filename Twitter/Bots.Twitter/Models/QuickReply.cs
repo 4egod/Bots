@@ -5,6 +5,11 @@ namespace Bots.Twitter
 {
     public class QuickReply
     {
+        public QuickReply()
+        {
+            Options = new List<QuickReplyOption>();
+        }
+
         [JsonProperty("type")]
         internal string Type { get; set; } = "options";
 
