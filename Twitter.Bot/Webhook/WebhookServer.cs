@@ -1,325 +1,124 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿using Bot;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Bot;
 
 namespace Twitter.Bot.Webhook
 {
     using Bot;
+    using System.Threading.Tasks;
 
-    public class WebhookServer
+    public class WebhookServer : WebhookServerBase
     {
-        public const string WebhookPath = "webhook"; // http://host:port/webhook
-        public const string WebhookStatusPath = "status"; // http://host:port/status
-
-        private IWebHost host;
-        private LogLevel logLevel;
-        private int _eventId = 1;
-
-        internal WebhookServer()
-        {
-            LoggerFactory factory = new LoggerFactory();
-            factory.AddConsole().AddDebug();
-            Logger = factory.CreateLogger(this.GetType().ToString() + $"[WITHOUT_WEBHOOK]");
-        }
-
-        public WebhookServer(int port, string consumerSecret, LogLevel level)
-        {
-            Port = port;
+        public WebhookServer(int port, string consumerSecret, LogLevel logLevel) : base(port, logLevel)
+        {      
             ConsumerSecret = consumerSecret;
-            //VerifyToken = verifyToken;
-            logLevel = level;
-            CreateWebhookHost();
+
+            GetReceived += WebhookServer_GetReceived;
+            PostReceived += WebhookServer_PostReceived;
         }
 
-        public ILogger Logger { get; private set; }
 
-        public int Port { get; private set; }
+        public override string WebhookPath => "webhook"; // http://host:port/webhook
 
         public string ConsumerSecret { get; private set; }
 
-        public virtual async void StartReceivingAsync()
-        {
-            await Task.Run(() =>
-            {
-                //var builder = WebHost.CreateDefaultBuilder();
-
-                //builder.ConfigureServices(cfg =>
-                //{
-                //    cfg.AddRouting();
-                //});
-
-                //builder.ConfigureLogging(cfg =>
-                //{
-                //    //cfg.ClearProviders();
-                //    //cfg.AddConsole();
-                //    //cfg.AddDebug();
-                //});
-
-                //builder.UseKestrel(options =>
-                //{
-                //    options.Listen(IPAddress.Any, Port);
-                //});
-
-                //builder.Configure(cfg =>
-                //{
-                //    cfg.UseRouter(r =>
-                //    {
-                //        r.MapGet(WebhookTestPath, Test);
-                //        r.MapGet(WebhookPath, Get);
-                //        r.MapPost(WebhookPath, Post);
-                //    });
-                //});
-
-                //host = builder.Build();
-                //logger = host.Services.GetService<ILoggerFactory>().CreateLogger(this.GetType().ToString() + $"[{IPAddress.Any}:{Port}]");
-
-                host.Run();
-            });
-        }
-
-        public void WaitForShutdown()
-        {
-            while (host == null)
-            {
-                Thread.Sleep(100);
-            }
-
-            host.WaitForShutdown();
-        }
-
-
-        public delegate void PostHandler(PostEventArgs e);
 
         public delegate void MessageHandler(MessageEventArgs e);
 
-        public event PostHandler PostReceived;
-
-        public event PostHandler PostFailed;
+        public event WebhookHandler InvalidPostReceived;
 
         public event MessageHandler MessageReceived;
 
+        
 
-        private void CreateWebhookHost()
+        private async void WebhookServer_GetReceived(WebhookEventArgs e)
         {
-            var builder = WebHost.CreateDefaultBuilder();
-
-            builder.ConfigureServices(cfg =>
-            {
-                cfg.AddRouting();
-            });
-
-            builder.ConfigureLogging(cfg =>
-            {
-                cfg.SetMinimumLevel(logLevel);
-                //cfg.ClearProviders();
-                //cfg.AddConsole();
-                //cfg.AddDebug();
-            });
-
-            builder.UseKestrel(options =>
-            {
-                options.Listen(IPAddress.Any, Port);
-            });
-
-            builder.Configure(cfg =>
-            {
-                cfg.UseRouter(r =>
-                {
-                    r.MapGet(WebhookStatusPath, Status);
-                    r.MapGet(WebhookPath, Get);
-                    r.MapPost(WebhookPath, Post);
-                });
-            });
-
-            host = builder.Build();
-            Logger = host.Services.GetService<ILoggerFactory>().CreateLogger(this.GetType().ToString() + $"[{IPAddress.Any}:{Port}]");
-        }
-
-        private async Task Status(HttpRequest request, HttpResponse response, RouteData route)
-        {
-            try
-            {
-                response.ContentType = ContentTypes.TextHtml;
-                await response.WriteAsync(Resources.WebhookStatus.Format(request.HttpContext.Connection.RemoteIpAddress));
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, e.Message);
-            }
-        }
-
-        private async Task Get(HttpRequest request, HttpResponse response, RouteData route)
-        {
-            var eventId = new EventId(_eventId++);
-
             try
             {
                 string field = "crc_token";
-                var connection = request.HttpContext.Connection;
+                var connection = e.Request.HttpContext.Connection;
 
-                if (request.Query.ContainsKey(field))
+                if (e.Request.Query.ContainsKey(field))
                 {
-                    var crcToken = request.Query[field];
-                    Logger.LogInformation(eventId, Resources.SubscriptionSuccess.Format(connection.RemoteIpAddress, connection.RemotePort));
-                    response.ContentType = ContentTypes.ApplicationJson;
-                    response.StatusCode = (int)HttpStatusCode.OK;
-                    await response.WriteAsync(CRC(ConsumerSecret, crcToken));
+                    var crcToken = e.Request.Query[field];
+                    Logger.LogInformation(EventId, Resources.SubscriptionSuccess.Format(connection.RemoteIpAddress, connection.RemotePort));
+                    e.Request.ContentType = ContentTypes.ApplicationJson;
+                    e.Response.StatusCode = (int)HttpStatusCode.OK;
+                    await e.Response.WriteAsync(CRC(ConsumerSecret, crcToken));
                 }
                 else
                 {
-                    Logger.LogWarning(eventId, Resources.SubscriptionFail.Format(connection.RemoteIpAddress, connection.RemotePort));
-                    response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    Logger.LogWarning(EventId, Resources.SubscriptionFail.Format(connection.RemoteIpAddress, connection.RemotePort));
+                    e.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.LogError(eventId, e, e.Message);
+                Logger.LogError(EventId, ex, ex.Message);
             }
         }
 
-        private async Task Post(HttpRequest request, HttpResponse response, RouteData route)
+        private async void WebhookServer_PostReceived(WebhookEventArgs e)
         {
-            var eventId = new EventId(_eventId++);
-
             try
             {
-                byte[] buf = new byte[request.ContentLength.Value];
-                await request.Body.ReadAsync(buf, 0, buf.Length);
+                byte[] buf = new byte[e.Request.ContentLength.Value];
+                await e.Request.Body.ReadAsync(buf, 0, buf.Length);
 
                 string body = Encoding.UTF8.GetString(buf);
-                Logger.LogDebug(eventId, Resources.WebhookPost + body);
 #if !DEBUG
-                const string signatureHeader = "X-Hub-Signature";
+                const string signatureHeader = "X-Twitter-Webhooks-Signature";
                 
-                if (!request.Headers.Keys.Contains(signatureHeader))
+                if (!e.Request.Headers.Keys.Contains(signatureHeader))
                 {
                     Logger.LogWarning(Resources.InvalidSignature);
 
-                    if (PostFailed != null)
-                    {
-                        ThreadPool.QueueUserWorkItem(state => PostFailed.Invoke(new PostEventArgs()
-                        {
-                            Headers = request.Headers,
-                            Body = body
-                        }));
-                    }
+                    InvalidPostReceived?.Invoke(e);
 
                     return;
                 }
 
-                var signature = request.Headers[signatureHeader][0];
+                var signature = e.Request.Headers[signatureHeader][0];
 
                 if (!VerifySignature(signature, buf))
                 {
                     Logger.LogWarning(Resources.InvalidSignature);
 
-                    if (PostFailed != null)
-                    {
-                        ThreadPool.QueueUserWorkItem(state => PostFailed.Invoke(new PostEventArgs()
-                        {
-                            Headers = request.Headers,
-                            Body = body
-                        }));
-                    }
+                    InvalidPostReceived?.Invoke(e);
 
                     return;
                 }
-#endif          
-                if (PostReceived != null)
-                {
-                    ThreadPool.QueueUserWorkItem(state => PostReceived.Invoke(new PostEventArgs()
-                    {
-                        Headers = request.Headers,
-                        Body = body
-                    }));
-                }
+#endif
+                WebhookEvent webhookEvent = body.FromJson<WebhookEvent>();
 
-                ProcessRequest(body);
+                if (webhookEvent.DirectMessageEvents != null)
+                {
+                    if (MessageReceived != null)
+                    {
+                        foreach (var item in webhookEvent.DirectMessageEvents)
+                        {
+                            MessageEventArgs messageEventArgs = new MessageEventArgs()
+                            {
+                                Message = item.ToMessage()
+                            };
+
+                            ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
+                        }
+                    }
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.LogError(eventId, e, e.Message);
+                Logger.LogError(EventId, ex, ex.Message);
             }
         }
 
-        private void ProcessRequest(string body)
-        {
-            object parsedJson = JsonConvert.DeserializeObject(body);
-
-            Console.WriteLine(parsedJson.ToJson());
-
-            WebhookEvent e = body.FromJson<WebhookEvent>();
-
-            if (e.DirectMessageEvents != null)
-            {
-                foreach (var item in e.DirectMessageEvents)
-                {
-                    Message m = new Message
-                    {
-                        Id = item.Id,
-                        Timestamp = item.Timestamp,
-                        Sender = item.Data.Sender,
-                        Recipient = item.Data.Target.RecipientId,
-                        Text = item.Data.Data.Text,
-                        QuickReplyResponse = item.Data.Data.QuickReplyResponse
-                    };
-
-                    MessageEventArgs messageEventArgs = new MessageEventArgs()
-                    {
-                        Message = m
-                    };
-
-                    ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
-                }
-            }
-
-            //var e = JsonConvert.DeserializeObject<Event>(body);
-
-            //foreach (var entry in e.Entries)
-            //{
-            //    foreach (var item in entry.Items)
-            //    {
-            //        if (item.Message != null && MessageReceived != null)
-            //        {
-            //            MessageEventArgs messageEventArgs = new MessageEventArgs()
-            //            {
-            //                Sender = item.Sender.Id,
-            //                Message = item.Message
-            //            };
-
-            //            ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
-            //        }
-
-            //        if (item.Postback != null && PostbackReceived != null)
-            //        {
-            //            PostbackEventArgs postbackEventArgs = new PostbackEventArgs()
-            //            {
-            //                Sender = item.Sender.Id,
-            //                Postback = item.Postback
-            //            };
-
-            //            ThreadPool.QueueUserWorkItem(state => PostbackReceived.Invoke(postbackEventArgs));
-            //        }
-            //    }
-            //}
-        }
-
-
-
-        internal static string CRC(string consumerSecret, string crcToken)
+        private string CRC(string consumerSecret, string crcToken)
         {
             byte[] consumerSecretBytes = Encoding.UTF8.GetBytes(consumerSecret);
             byte[] crcTokenBytes = Encoding.UTF8.GetBytes(crcToken);
@@ -331,6 +130,15 @@ namespace Twitter.Bot.Webhook
             return "{\n" +
                 $"\"response_token\":\"sha256={Convert.ToBase64String(computedHash)}\"" +
                 "\n}";
+        }
+
+        private bool VerifySignature(string signature, byte[] body)
+        {
+            using (var crypto = new HMACSHA256(Encoding.UTF8.GetBytes(ConsumerSecret)))
+            {
+                var hash = Convert.ToBase64String(crypto.ComputeHash(body));
+                return hash == signature.Replace("sha256=", "");
+            }
         }
     }
 }

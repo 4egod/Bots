@@ -11,7 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ContentTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PostEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebhookEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebhookServerBase.cs" />
   </ItemGroup>
 </Project>
