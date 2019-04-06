@@ -23,7 +23,17 @@ namespace EchoBot
 
             if (e.Message.Sender != UserId)
             {
-                await bot.SendDirectMessageAsync(e.Message.Sender, e.Message.Text);
+                QuickReply qr = null;
+
+                if (e.Message.Text == "q")
+                {
+                    qr = new QuickReply();
+                    qr.Options.Add(new QuickReplyOption() { Label = "1", Metadata = "#1#" });
+                    qr.Options.Add(new QuickReplyOption() { Label = "2", Metadata = "#2#" });
+                    qr.Options.Add(new QuickReplyOption() { Label = "3", Metadata = "#3#" });
+                }
+
+                await bot.SendDirectMessageAsync(e.Message.Sender, e.Message.Text, qr);
             }
         }
     }
