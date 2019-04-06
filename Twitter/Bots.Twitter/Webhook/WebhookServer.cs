@@ -48,6 +48,7 @@ namespace Bots.Twitter.Webhook
                     e.Request.ContentType = ContentTypes.ApplicationJson;
                     e.Response.StatusCode = (int)HttpStatusCode.OK;
                     await e.Response.WriteAsync(CRC(ConsumerSecret, crcToken));
+                    e.IsValid = true;
                 }
                 else
                 {
@@ -61,14 +62,10 @@ namespace Bots.Twitter.Webhook
             }
         }
 
-        private async void WebhookServer_PostReceived(WebhookEventArgs e)
+        private void WebhookServer_PostReceived(WebhookEventArgs e)
         {
             try
             {
-                byte[] buf = new byte[e.Request.ContentLength.Value];
-                await e.Request.Body.ReadAsync(buf, 0, buf.Length);
-
-                string body = Encoding.UTF8.GetString(buf);
 #if !DEBUG
                 const string signatureHeader = "X-Twitter-Webhooks-Signature";
                 
@@ -83,7 +80,7 @@ namespace Bots.Twitter.Webhook
 
                 var signature = e.Request.Headers[signatureHeader][0];
 
-                if (!VerifySignature(signature, buf))
+                if (!VerifySignature(signature, e.BodyRaw))
                 {
                     Logger.LogWarning(Resources.InvalidSignature);
 
@@ -92,7 +89,9 @@ namespace Bots.Twitter.Webhook
                     return;
                 }
 #endif
-                WebhookEvent webhookEvent = body.FromJson<WebhookEvent>();
+                e.IsValid = true;
+
+                WebhookEvent webhookEvent = e.Body.FromJson<WebhookEvent>();
 
                 if (webhookEvent.DirectMessageEvents != null)
                 {
@@ -105,7 +104,8 @@ namespace Bots.Twitter.Webhook
                                 Message = item.ToMessage()
                             };
 
-                            ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
+                            MessageReceived.Invoke(messageEventArgs);
+                            //ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
                         }
                     }
                 }

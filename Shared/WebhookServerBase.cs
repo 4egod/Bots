@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -175,9 +176,16 @@ namespace Bots
             
             try
             {
+                byte[] bodyRaw = new byte[request.ContentLength.Value];
+                await request.Body.ReadAsync(bodyRaw, 0, bodyRaw.Length);
+
+                string body = Encoding.UTF8.GetString(bodyRaw);
+
                 PostReceived?.Invoke(new WebhookEventArgs()
                 {
                     Request = request,
+                    BodyRaw = bodyRaw,
+                    Body = body,
                     Response = response
                 });
 
