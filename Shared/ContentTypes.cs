@@ -1,4 +1,4 @@
-﻿namespace Bot
+﻿namespace Bots
 {
     internal static class ContentTypes
     {

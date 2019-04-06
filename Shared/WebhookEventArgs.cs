@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 
-namespace Bot
+namespace Bots
 {
     public class WebhookEventArgs : EventArgs
     {

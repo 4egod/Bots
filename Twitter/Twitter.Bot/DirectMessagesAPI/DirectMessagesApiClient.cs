@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Twitter.Bot.DirectMessagesAPI
+namespace Bots.Twitter.DirectMessagesAPI
 {
     using Models;
 

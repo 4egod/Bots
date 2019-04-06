@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Twitter.Bot {
+namespace Bots.Twitter {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Twitter.Bot {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Twitter.Bot.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bots.Twitter.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -84,25 +84,6 @@ namespace Twitter.Bot {
         internal static string SubscriptionSuccess {
             get {
                 return ResourceManager.GetString("SubscriptionSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Webhook [POST]: .
-        /// </summary>
-        internal static string WebhookPost {
-            get {
-                return ResourceManager.GetString("WebhookPost", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Webhook status: OK
-        ///Your IP: {0}.
-        /// </summary>
-        internal static string WebhookStatus {
-            get {
-                return ResourceManager.GetString("WebhookStatus", resourceCulture);
             }
         }
     }

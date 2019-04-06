@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Twitter.Bot.Converters
+namespace Bots.Twitter.Converters
 {
-    public class DateTimeConverter : DateTimeConverterBase
+    internal class DateTimeConverter : DateTimeConverterBase
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

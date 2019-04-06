@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using Twitter.Bot.Models;
 
-namespace Twitter.Bot.Webhook
+namespace Bots.Twitter.Webhook
 {
+    using Models;
+
     internal class WebhookEvent
     {
         [JsonProperty("for_user_id")]

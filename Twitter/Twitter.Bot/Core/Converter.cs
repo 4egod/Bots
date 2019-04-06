@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Twitter.Bot
+namespace Bots.Twitter
 {
     internal static class Converter
     {

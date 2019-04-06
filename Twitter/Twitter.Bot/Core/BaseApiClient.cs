@@ -8,9 +8,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Bot;
 
-namespace Twitter.Bot
+namespace Bots.Twitter
 {
     using Models;
 

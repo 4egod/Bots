@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twitter.Bot.Models
+namespace Bots.Twitter.Models
 {
-    public class MessageCreateData
+    internal class MessageCreateData
     {
         [JsonProperty("target")]
         public Target Target { get; set; }

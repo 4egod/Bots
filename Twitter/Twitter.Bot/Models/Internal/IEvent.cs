@@ -1,11 +1,11 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Twitter.Bot.Models
+namespace Bots.Twitter.Models
 {
     using Converters;
 
-    public interface IEvent
+    internal interface IEvent
     {
         [JsonProperty("type")]
         string Type { get; }

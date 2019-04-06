@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Twitter.Bot.Tests")]
+[assembly: InternalsVisibleTo("Bots.Twitter.Tests")]

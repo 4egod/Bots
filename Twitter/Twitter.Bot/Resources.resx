@@ -126,11 +126,4 @@
   <data name="SubscriptionSuccess" xml:space="preserve">
     <value>Client {0}:{1} successfully subscribed.</value>
   </data>
-  <data name="WebhookPost" xml:space="preserve">
-    <value>Webhook [POST]: </value>
-  </data>
-  <data name="WebhookStatus" xml:space="preserve">
-    <value>Webhook status: OK
-Your IP: {0}</value>
-  </data>
 </root>

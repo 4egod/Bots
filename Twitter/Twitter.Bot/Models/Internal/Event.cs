@@ -1,9 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Twitter.Bot.Models
+namespace Bots.Twitter.Models
 {
-    public abstract class Event : IEvent
+    internal abstract class Event : IEvent
     {
         //[JsonProperty("type")]
         public abstract string Type { get; }
@@ -15,7 +15,7 @@ namespace Twitter.Bot.Models
         public DateTime Timestamp { get; set; }
     }
 
-    public class Event<T> where T : IEvent
+    internal class Event<T> where T : IEvent
     {
         [JsonProperty("event")]
         public T Data { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Twitter.Bot
+namespace Bots.Twitter
 {
     public class MessageEventArgs : EventArgs
     {

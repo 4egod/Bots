@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twitter.Bot
+namespace Bots.Twitter
 {
     public class QuickReplyOption
     {

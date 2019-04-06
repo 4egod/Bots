@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Twitter.Bot
+namespace Bots.Twitter
 {
     public class ApiError
     {

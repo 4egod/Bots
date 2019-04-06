@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Twitter.Bot.Models
+namespace Bots.Twitter.Models
 {
-    public class MessageCreateEvent : Event
+    internal class MessageCreateEvent : Event
     {
         public override string Type => "message_create";
 

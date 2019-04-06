@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Bot
+namespace Bots
 {
     public static class Converter
     {

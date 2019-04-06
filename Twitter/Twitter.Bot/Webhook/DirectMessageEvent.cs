@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Twitter.Bot.Webhook
+namespace Bots.Twitter.Webhook
 {
     using Models;
     using Newtonsoft.Json;

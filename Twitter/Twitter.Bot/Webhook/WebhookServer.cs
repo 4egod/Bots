@@ -1,5 +1,4 @@
-﻿using Bot;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
@@ -7,9 +6,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
-namespace Twitter.Bot.Webhook
+namespace Bots.Twitter.Webhook
 {
-    using Bot;
     using System.Threading.Tasks;
 
     public class WebhookServer : WebhookServerBase

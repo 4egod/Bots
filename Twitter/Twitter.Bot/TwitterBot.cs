@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Twitter.Bot
+namespace Bots.Twitter
 {
     using DirectMessagesAPI;
 
