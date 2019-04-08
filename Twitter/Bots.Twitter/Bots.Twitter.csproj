@@ -8,6 +8,19 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>twitter, bot, bots, chatbot, api, sdk</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>.NET toolbox for building Twitter bots.
+
+Features:
+- Send direct messages
+- Send direct messages with quick replies
+- Parse messages received on your webhook
+
+Platform Supports:
+- .NET Standard 2.0
+- .NET Core 2.1</Description>
+    <PackageProjectUrl>https://github.com/4egod/Bots</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/4egod/Bots/raw/master/Twitter/Logo.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/4egod/Bots.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
