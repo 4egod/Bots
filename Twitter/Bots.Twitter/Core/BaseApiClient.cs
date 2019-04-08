@@ -29,7 +29,7 @@ namespace Bots.Twitter
             httpClient = new HttpClient();
         }
 
-        public abstract string ApiUri { get; }
+        public virtual string ApiUri => $"https://api.twitter.com/{ApiVersion}/";
 
         public string ConsumerKey { get; private set; }
 

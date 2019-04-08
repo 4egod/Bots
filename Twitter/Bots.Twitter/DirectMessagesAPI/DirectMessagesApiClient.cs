@@ -12,7 +12,7 @@ namespace Bots.Twitter.DirectMessagesAPI
         {
         }
 
-        public override string ApiUri => $"https://api.twitter.com/{ApiVersion}/direct_messages/";
+        public override string ApiUri => base.ApiUri + "direct_messages/";
 
         public async Task<MessageCreateEvent> SendDirectMessageAsync(long userId, string text)
         {
