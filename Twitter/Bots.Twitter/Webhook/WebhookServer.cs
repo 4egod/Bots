@@ -26,13 +26,17 @@ namespace Bots.Twitter.Webhook
         public string ConsumerSecret { get; private set; }
 
 
-        public delegate void MessageHandler(MessageEventArgs e);
+        public delegate void DirectMessageHandler(DirectMessageEventArgs e);
+
+        public delegate void FollowHandler(FollowEventArgs e);
 
         public event WebhookHandler InvalidPostReceived;
 
-        public event MessageHandler MessageReceived;
+        public event DirectMessageHandler DirectMessageReceived;
 
-        
+        public event FollowHandler Followed;
+
+
 
         private async void WebhookServer_GetReceived(WebhookEventArgs e)
         {
@@ -95,17 +99,35 @@ namespace Bots.Twitter.Webhook
 
                 if (webhookEvent.DirectMessageEvents != null)
                 {
-                    if (MessageReceived != null)
+                    if (DirectMessageReceived != null)
                     {
                         foreach (var item in webhookEvent.DirectMessageEvents)
                         {
-                            MessageEventArgs messageEventArgs = new MessageEventArgs()
+                            DirectMessageEventArgs args = new DirectMessageEventArgs()
                             {
                                 Message = item.ToMessage()
                             };
 
-                            MessageReceived.Invoke(messageEventArgs);
+                            DirectMessageReceived.Invoke(args);
                             //ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
+                        }
+                    }
+                }
+
+                if (webhookEvent.FollowEvents != null)
+                {                
+                    if (Followed != null)
+                    {
+                        foreach (var item in webhookEvent.FollowEvents)
+                        {
+                            FollowEventArgs args = new FollowEventArgs()
+                            {
+                                Timestamp = item.Timestamp,
+                                Target = item.Target,
+                                Source = item.Source
+                            };
+
+                            Followed.Invoke(args);
                         }
                     }
                 }

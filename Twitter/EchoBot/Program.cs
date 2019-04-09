@@ -12,12 +12,12 @@ namespace EchoBot
         static void Main(string[] args)
         {
             Console.WriteLine("Starting the bot...");
-            bot.MessageReceived += Bot_MessageReceived;
+            bot.DirectMessageReceived += Bot_MessageReceived;
             bot.StartReceivingAsync();
             bot.WaitForShutdown();
         }
 
-        private async static void Bot_MessageReceived(MessageEventArgs e)
+        private async static void Bot_MessageReceived(DirectMessageEventArgs e)
         {
             Console.WriteLine($"{e.Message.Sender}: {e.Message.Text}");
 

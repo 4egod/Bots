@@ -12,5 +12,8 @@ namespace Bots.Twitter.Webhook
 
         [JsonProperty("direct_message_events")]
         public List<MessageCreateEvent> DirectMessageEvents { get; set; }
+
+        [JsonProperty("follow_events")]
+        public List<FollowEvent> FollowEvents { get; set; }
     }
 }

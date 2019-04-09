@@ -13,10 +13,18 @@ namespace WebhookDebugger
     {
         static TwitterBot bot = new TwitterBot(80, ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, LogLevel.Warning);
 
+        static bool RawDebug = false;
+
         static void Main(string[] args)
         {
-            bot.PostReceived += Bot_PostReceived; 
+            if (RawDebug)
+            {
+                bot.PostReceived += Bot_PostReceived;            
+            }
+
             bot.InvalidPostReceived += Bot_InvalidPostReceived;
+            bot.DirectMessageReceived += Bot_DirectMessageReceived;
+            bot.Followed += Bot_Followed;
             bot.StartReceivingAsync();
 
             while (true)
@@ -24,6 +32,26 @@ namespace WebhookDebugger
                 Console.ReadLine();
                 Console.Clear();
             }
+        }
+
+        private static async void Bot_Followed(FollowEventArgs e)
+        {
+            await Task.Run(async () =>
+            {
+                await Task.Delay(50);
+
+                Console.WriteLine($"[Follow] {e.Source.Id} ({e.Source.ScreenName})");
+            });
+        }
+
+        private static async void Bot_DirectMessageReceived(DirectMessageEventArgs e)
+        {
+            await Task.Run(async () =>
+            {
+                await Task.Delay(50);
+
+                Console.WriteLine($"[Direct Message] {e.Message.Sender}: {e.Message.Text}");
+            });
         }
 
         private static async void Bot_InvalidPostReceived(WebhookEventArgs e)

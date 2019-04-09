@@ -6,7 +6,7 @@
     <Version>0.19.4.8</Version>
     <Copyright>Copyright (C) Dmitry Tarasov, 2019</Copyright>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>twitter, bot, bots, chatbot, api, sdk</PackageTags>
+    <PackageTags>twitter, bot, bots, chat, chatbot, api, sdk</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>.NET toolbox for building Twitter bots.
 

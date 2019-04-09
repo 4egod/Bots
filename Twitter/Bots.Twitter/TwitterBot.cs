@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Bots.Twitter
 {
-    using DirectMessagesAPI;
+    using Api;
 
     public class TwitterBot : Webhook.WebhookServer
     {
@@ -14,7 +14,8 @@ namespace Bots.Twitter
         public const LogLevel DefaultLogLevel = LogLevel.Information;
 #endif
         private bool isWebhookEnabled;
-        private DirectMessagesApiClient directMessagesClient;
+        private UsersClient usersClient;
+        private DirectMessagesClient directMessagesClient;
 
         public TwitterBot(int webhookPort, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, LogLevel logLevel = DefaultLogLevel) :
             base(webhookPort, consumerSecret, logLevel)
@@ -26,7 +27,8 @@ namespace Bots.Twitter
             AccessToken = accessToken;
             AccessTokenSecret = accessTokenSecret;
 
-            directMessagesClient = new DirectMessagesApiClient(consumerKey, consumerSecret, accessToken, accessTokenSecret); 
+            usersClient = new UsersClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+            directMessagesClient = new DirectMessagesClient(consumerKey, consumerSecret, accessToken, accessTokenSecret); 
         }
 
         public string ConsumerKey { get; private set; }
@@ -43,6 +45,11 @@ namespace Bots.Twitter
             }
 
             base.StartReceivingAsync();
+        }
+
+        public async Task<User> GetUserAsync(long userId)
+        {
+            return await usersClient.GetUserAsync(userId);
         }
 
         public async Task<Message> SendDirectMessageAsync(long userId, string text)
