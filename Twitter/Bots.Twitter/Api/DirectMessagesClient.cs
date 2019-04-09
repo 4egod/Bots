@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Bots.Twitter.DirectMessagesAPI
+namespace Bots.Twitter.Api
 {
     using Models;
 
-    internal class DirectMessagesApiClient : BaseApiClient
+    internal class DirectMessagesClient : BaseApiClient
     {
-        public DirectMessagesApiClient(string consumerKey, string consumerSeceret, string accessToken, string accessTokenSecret) :
+        public DirectMessagesClient(string consumerKey, string consumerSeceret, string accessToken, string accessTokenSecret) :
             base(consumerKey, consumerSeceret, accessToken, accessTokenSecret)
         {
         }

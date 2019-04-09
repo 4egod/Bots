@@ -9,11 +9,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Bots.Twitter
+namespace Bots.Twitter.Api
 {
     using Models;
 
-    public abstract class BaseApiClient
+    internal abstract class BaseApiClient
     {
         public readonly Version ApiVersion = new Version(1, 1);
 
@@ -27,6 +27,7 @@ namespace Bots.Twitter
             AccessTokenSecret = accessTokenSecret;
 
             httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentTypes.ApplicationJson));
         }
 
         public virtual string ApiUri => $"https://api.twitter.com/{ApiVersion}/";
@@ -44,18 +45,11 @@ namespace Bots.Twitter
             string response;
             using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Get, uri))
             {
+                req.Headers.Add("Authorization", GenerateAuthorizationHeader(uri, HttpMethod.Get));
                 response = await (await httpClient.SendAsync(req)).Content.ReadAsStringAsync();
             }
 
-            //var errorContainer = JsonConvert.DeserializeObject<ApiErrorContainer>(response);
-            //if (errorContainer.Error != null)
-            //{
-            //    throw new ApiException(errorContainer.Error);
-            //}
-
-            T res = JsonConvert.DeserializeObject<T>(response);
-
-            return res;
+            return Parse<T>(response);
         }
 
         protected async Task<T> PostAsync<T>(object request, string uri)
@@ -67,8 +61,6 @@ namespace Bots.Twitter
 #endif
             string response;
 
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentTypes.ApplicationJson));
-
             using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, uri))
             {
                 req.Headers.Add("Authorization", GenerateAuthorizationHeader(uri, HttpMethod.Post));
@@ -76,22 +68,7 @@ namespace Bots.Twitter
                 response = await (await httpClient.SendAsync(req)).Content.ReadAsStringAsync();
             }
 
-            var errorContainer = JsonConvert.DeserializeObject<ApiErrorContainer>(response);
-            if (errorContainer.Errors != null)
-            {
-                if (errorContainer.Errors.Count == 1)
-                {
-                    throw new ApiException(errorContainer.Errors[0]);
-                }
-                else
-                {
-                    throw new ApiException(response);
-                }
-            }
-
-            T res = JsonConvert.DeserializeObject<T>(response);
-
-            return res;
+            return Parse<T>(response);
         }
 
         protected string GenerateAuthorizationHeader(string requestUri, HttpMethod method)
@@ -141,6 +118,26 @@ namespace Bots.Twitter
             }
 
             res += $"oauth_signature = \"{Uri.EscapeDataString(signature)}\"";
+
+            return res;
+        }
+
+        private T Parse<T>(string response)
+        {
+            var errorContainer = JsonConvert.DeserializeObject<ApiErrorContainer>(response);
+            if (errorContainer.Errors != null)
+            {
+                if (errorContainer.Errors.Count == 1)
+                {
+                    throw new ApiException(errorContainer.Errors[0]);
+                }
+                else
+                {
+                    throw new ApiException(response);
+                }
+            }
+
+            T res = JsonConvert.DeserializeObject<T>(response);
 
             return res;
         }
