@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Messenger.Bot.Tests\Consts.cs" Link="Consts.cs" />
+    <Compile Include="..\Bots.Messenger.Tests\Consts.cs" Link="Consts.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Messenger.Bot\Messenger.Bot.csproj" />
+    <ProjectReference Include="..\Bots.Messenger\Bots.Messenger.csproj" />
   </ItemGroup>
 
   <ItemGroup>

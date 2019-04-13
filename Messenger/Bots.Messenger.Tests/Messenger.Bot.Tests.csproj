@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Messenger.Bot\Messenger.Bot.csproj" />
+    <ProjectReference Include="..\Bots.Messenger\Bots.Messenger.csproj" />
   </ItemGroup>
 
 </Project>

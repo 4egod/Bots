@@ -3,16 +3,16 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.18.10.23</Version>
+    <Version>1.19.4.12</Version>
     <Authors>Dmitry Tarasov</Authors>
-    <Product>Messenger Platform .NET (Messenger.Bot)</Product>
-    <Copyright>Copyright (C) Dmitry Tarasov, 2018</Copyright>
-    <PackageProjectUrl>https://github.com/4egod/Messenger.Bot</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/4egod/Messenger.Bot.git</RepositoryUrl>
+    <Product>Bots.Messenger</Product>
+    <Copyright>Copyright (C) Dmitry Tarasov, 2019</Copyright>
+    <PackageProjectUrl>https://github.com/4egod/Bots</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/4egod/Bots.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>facebook, messenger, platform, bot, bots, api, sdk</PackageTags>
-    <RootNamespace>Messenger.Bot</RootNamespace>
-    <PackageIconUrl>https://github.com/4egod/Messenger.Bot/raw/master/Messenger.png</PackageIconUrl>
+    <PackageTags>facebook, messenger, platform, bot, bots, chat, chatbot, api, sdk</PackageTags>
+    <RootNamespace>Bots.Messenger</RootNamespace>
+    <PackageIconUrl>https://github.com/4egod/Bots/raw/master/Messenger/Messenger.png</PackageIconUrl>
     <Description>.NET Implementation of Facebook Messenger Platform which is a toolbox for building bots.
 
 Messenger Platform API version: 3.1
