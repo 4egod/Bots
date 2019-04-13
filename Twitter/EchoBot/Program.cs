@@ -12,12 +12,12 @@ namespace EchoBot
         static void Main(string[] args)
         {
             Console.WriteLine("Starting the bot...");
-            bot.DirectMessageReceived += Bot_MessageReceived;
+            bot.OnMessage += Bot_OnMessage;
             bot.StartReceivingAsync();
             bot.WaitForShutdown();
         }
 
-        private async static void Bot_MessageReceived(DirectMessageEventArgs e)
+        private static async void Bot_OnMessage(MessageEventArgs e)
         {
             Console.WriteLine($"{e.Message.Sender}: {e.Message.Text}");
 
@@ -33,7 +33,7 @@ namespace EchoBot
                     qr.Options.Add(new QuickReplyOption() { Label = "3", Metadata = "#3#" });
                 }
 
-                await bot.SendDirectMessageAsync(e.Message.Sender, e.Message.Text, qr);
+                await bot.SendMessageAsync(e.Message.Sender, e.Message.Text, qr);
             }
         }
     }

@@ -27,7 +27,7 @@ namespace Bots.Twitter.Tests
         [TestMethod]
         public void GetUserTest()
         {
-            var result = client.SendDirectMessageAsync(UserId, "test_message").Result;
+            var result = client.SendMessageAsync(UserId, "test_message").Result;
             Trace.WriteLine($"Message Id: {result.Id}");
         }
     }

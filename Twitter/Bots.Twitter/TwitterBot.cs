@@ -52,14 +52,14 @@ namespace Bots.Twitter
             return await usersClient.GetUserAsync(userId);
         }
 
-        public async Task<Message> SendDirectMessageAsync(long userId, string text)
+        public async Task<Message> SendMessageAsync(long userId, string text)
         {
-            return await SendDirectMessageAsync(userId, text, null);
+            return await SendMessageAsync(userId, text, null);
         }
 
-        public async Task<Message> SendDirectMessageAsync(long userId, string text, QuickReply quickReply)
+        public async Task<Message> SendMessageAsync(long userId, string text, QuickReply quickReply)
         {
-            var messageEvent = await directMessagesClient.SendDirectMessageAsync(userId, text, quickReply);
+            var messageEvent = await directMessagesClient.SendMessageAsync(userId, text, quickReply);
 
             return messageEvent.ToMessage();
         }

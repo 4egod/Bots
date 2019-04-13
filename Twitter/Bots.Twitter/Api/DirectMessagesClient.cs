@@ -14,12 +14,12 @@ namespace Bots.Twitter.Api
 
         public override string ApiUri => base.ApiUri + "direct_messages/";
 
-        public async Task<MessageCreateEvent> SendDirectMessageAsync(long userId, string text)
+        public async Task<MessageCreateEvent> SendMessageAsync(long userId, string text)
         {
-            return await SendDirectMessageAsync(userId, text, null);
+            return await SendMessageAsync(userId, text, null);
         }
 
-        public async Task<MessageCreateEvent> SendDirectMessageAsync(long userId, string text, QuickReply quickReply)
+        public async Task<MessageCreateEvent> SendMessageAsync(long userId, string text, QuickReply quickReply)
         {
             MessageCreateEvent messageCreateEvent = new MessageCreateEvent()
             {

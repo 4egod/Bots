@@ -15,5 +15,11 @@ namespace Bots.Twitter.Webhook
 
         [JsonProperty("follow_events")]
         public List<FollowEvent> FollowEvents { get; set; }
+
+        [JsonProperty("tweet_create_events")]
+        public List<TweetEvent> TweetCreateEvents { get; set; }
+
+        [JsonProperty("favorite_events")]
+        public List<LikeEvent> LikeEvents { get; set; }
     }
 }

@@ -4,12 +4,9 @@ using System;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 
 namespace Bots.Twitter.Webhook
 {
-    using System.Threading.Tasks;
-
     public class WebhookServer : WebhookServerBase
     {
         public WebhookServer(int port, string consumerSecret, LogLevel logLevel) : base(port, logLevel)
@@ -26,18 +23,31 @@ namespace Bots.Twitter.Webhook
         public string ConsumerSecret { get; private set; }
 
 
-        public delegate void DirectMessageHandler(DirectMessageEventArgs e);
+        public delegate void MessageHandler(MessageEventArgs e);
 
         public delegate void FollowHandler(FollowEventArgs e);
 
+        public delegate void TweetHandler(TweetEventArgs e);
+
+        public delegate void LikeHandler(LikeEventArgs e);
+
         public event WebhookHandler InvalidPostReceived;
 
-        public event DirectMessageHandler DirectMessageReceived;
+        public event MessageHandler OnMessage;
 
-        public event FollowHandler Followed;
+        public event FollowHandler OnFollow;
 
+        public event TweetHandler OnTweet;
 
+        public event TweetHandler OnRetweet;
 
+        public event TweetHandler OnQuote;
+
+        public event TweetHandler OnComment;
+
+        public event LikeHandler OnLike;
+
+        
         private async void WebhookServer_GetReceived(WebhookEventArgs e)
         {
             try
@@ -48,7 +58,7 @@ namespace Bots.Twitter.Webhook
                 if (e.Request.Query.ContainsKey(field))
                 {
                     var crcToken = e.Request.Query[field];
-                    Logger.LogInformation(EventId, Resources.SubscriptionSuccess.Format(connection.RemoteIpAddress, connection.RemotePort));
+                    Logger.LogWarning(EventId, Resources.SubscriptionSuccess.Format(connection.RemoteIpAddress, connection.RemotePort));
                     e.Request.ContentType = ContentTypes.ApplicationJson;
                     e.Response.StatusCode = (int)HttpStatusCode.OK;
                     await e.Response.WriteAsync(CRC(ConsumerSecret, crcToken));
@@ -99,16 +109,16 @@ namespace Bots.Twitter.Webhook
 
                 if (webhookEvent.DirectMessageEvents != null)
                 {
-                    if (DirectMessageReceived != null)
+                    if (OnMessage != null)
                     {
                         foreach (var item in webhookEvent.DirectMessageEvents)
                         {
-                            DirectMessageEventArgs args = new DirectMessageEventArgs()
+                            MessageEventArgs args = new MessageEventArgs()
                             {
                                 Message = item.ToMessage()
                             };
 
-                            DirectMessageReceived.Invoke(args);
+                            OnMessage.Invoke(args);
                             //ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
                         }
                     }
@@ -116,7 +126,7 @@ namespace Bots.Twitter.Webhook
 
                 if (webhookEvent.FollowEvents != null)
                 {                
-                    if (Followed != null)
+                    if (OnFollow != null)
                     {
                         foreach (var item in webhookEvent.FollowEvents)
                         {
@@ -127,7 +137,77 @@ namespace Bots.Twitter.Webhook
                                 Source = item.Source
                             };
 
-                            Followed.Invoke(args);
+                            OnFollow.Invoke(args);
+                        }
+                    }
+                }
+
+                if (webhookEvent.TweetCreateEvents != null)
+                {
+                    foreach (var item in webhookEvent.TweetCreateEvents)
+                    {
+                        TweetEventArgs args = new TweetEventArgs()
+                        {
+                            Tweet = item
+                        };
+
+                        bool processed = false;
+
+                        if (item.RetweetedFrom != null)
+                        {
+                            OnRetweet?.Invoke(args);
+                            processed = true;
+                        }
+
+                        if (item.QuotedFrom != null)
+                        {
+                            OnQuote?.Invoke(args);
+                            processed = true;
+                        }
+
+                        if (item.ReplyToUserId != null)
+                        {
+                            OnComment?.Invoke(args);
+                            processed = true;
+                        }
+
+                        if (!processed)
+                        {
+                            OnTweet?.Invoke(args);
+                        }
+                    }
+
+                    #region 
+                    //if (Tweeted != null)
+                    //{
+                    //    foreach (var item in webhookEvent.TweetCreateEvents)
+                    //    {
+                    //        TweetCreateEventArgs args = new TweetCreateEventArgs()
+                    //        {
+                    //            Tweet = item
+                    //        };
+
+                    //        Tweeted.Invoke(args);
+                    //    }
+                    //}
+                    #endregion
+                }
+
+                if (webhookEvent.LikeEvents != null)
+                {
+                    if (OnLike != null)
+                    {
+                        foreach (var item in webhookEvent.LikeEvents)
+                        {
+                            LikeEventArgs args = new LikeEventArgs()
+                            {
+                                Id = item.Id,
+                                Timestamp = item.Timestamp,
+                                Tweet = item.Tweet,
+                                User = item.User
+                            };
+
+                            OnLike.Invoke(args);
                         }
                     }
                 }
