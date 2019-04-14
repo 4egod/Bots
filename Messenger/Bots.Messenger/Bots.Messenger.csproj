@@ -12,7 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>facebook, messenger, platform, bot, bots, chat, chatbot, api, sdk</PackageTags>
     <RootNamespace>Bots.Messenger</RootNamespace>
-    <PackageIconUrl>https://github.com/4egod/Bots/raw/master/Messenger/Messenger.png</PackageIconUrl>
+    <PackageIconUrl>https://github.com/4egod/Bots/raw/master/Messenger/Logo.png</PackageIconUrl>
     <Description>.NET Implementation of Facebook Messenger Platform which is a toolbox for building bots.
 
 Messenger Platform API version: 3.1

@@ -1,7 +1,7 @@
 |   Library   |   Version   |   Downloads   |
 |---------|:----------:|:----------:|
 | **Bots.Twitter** | [![NuGet](https://img.shields.io/nuget/v/Bots.Twitter.svg)](https://www.nuget.org/packages/Bots.Twitter) | [![NuGet](https://img.shields.io/nuget/dt/Bots.Twitter.svg)](https://www.nuget.org/packages/Bots.Twitter) |
-| **Bots.Messenger** |[![NuGet](https://img.shields.io/nuget/v/Messenger.Bot.svg)](https://www.nuget.org/packages/Messenger.Bot)|[![NuGet](https://img.shields.io/nuget/dt/Messenger.Bot.svg)](https://www.nuget.org/packages/Messenger.Bot)|
+| **Bots.Messenger** |[![NuGet](https://img.shields.io/nuget/v/Bots.Messenger.svg)](https://www.nuget.org/packages/Bots.Messenger)|[![NuGet](https://img.shields.io/nuget/dt/Messenger.Bot.svg)](https://www.nuget.org/packages/Bots.Messenger)|
 
 
 # ![GitHub Logo](https://github.com/4egod/Bots/raw/master/Twitter/Logo.Small.png) Bots.Twitter
