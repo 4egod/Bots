@@ -9,9 +9,9 @@ namespace Bots.Twitter
     public class TwitterBot : Webhook.WebhookServer
     {
 #if DEBUG
-        public const LogLevel DefaultLogLevel = LogLevel.Debug;
-#else
         public const LogLevel DefaultLogLevel = LogLevel.Information;
+#else
+        public const LogLevel DefaultLogLevel = LogLevel.Warning;
 #endif
         private bool isWebhookEnabled;
         private UsersClient usersClient;
@@ -19,7 +19,12 @@ namespace Bots.Twitter
         private WelcomeMessageClient welcomeMessageClient;
 
         public TwitterBot(int webhookPort, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, LogLevel logLevel = DefaultLogLevel) :
-            base(webhookPort, consumerSecret, logLevel)
+            this(webhookPort, 0, consumerKey, consumerSecret, accessToken, accessTokenSecret, logLevel)
+        {
+        }
+
+        public TwitterBot(int webhookPort, long recipient, string consumerKey, string consumerSecret, string accessToken, 
+            string accessTokenSecret, LogLevel logLevel = DefaultLogLevel) : base(webhookPort, consumerSecret, logLevel)
         {
             isWebhookEnabled = true;
 

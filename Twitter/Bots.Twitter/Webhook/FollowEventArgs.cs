@@ -2,9 +2,17 @@
 
 namespace Bots.Twitter
 {
-    public class FollowEventArgs : EventArgs
+    public enum FollowType
+    {
+        Follow,
+        Unfollow
+    }
+
+    public class FollowEventArgs : BaseEventArgs
     {
         public DateTime Timestamp { get; set; }
+
+        public FollowType Type { get; set; }
 
         public User Target { get; set; }
 

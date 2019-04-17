@@ -2,7 +2,7 @@
 
 namespace Bots.Twitter
 {
-    public class LikeEventArgs : EventArgs
+    public class LikeEventArgs : BaseEventArgs
     {
         public string Id { get; set; }
 

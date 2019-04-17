@@ -2,7 +2,7 @@
 
 namespace Bots.Twitter
 {
-    public class MessageEventArgs : EventArgs
+    public class MessageEventArgs : BaseEventArgs
     {
         public Message Message { get; set; }
     }

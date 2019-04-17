@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Bots.Twitter.Webhook
 {
     using Converters;
-    using Models;
 
     internal class FollowEvent 
     {

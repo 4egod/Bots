@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Security.Cryptography;
@@ -10,20 +11,35 @@ namespace Bots.Twitter.Webhook
 {
     public class WebhookServer : WebhookServerBase
     {
-        public WebhookServer(int port, string consumerSecret, LogLevel logLevel) : base(port, logLevel)
+        private class RecipientChecker
+        {
+            [JsonProperty("for_user_id")]
+            public long Recipient { get; set; }
+        }
+
+        public WebhookServer(int port, string consumerSecret, LogLevel logLevel) : this(port, consumerSecret, 0, logLevel)
         {      
+        }
+
+        public WebhookServer(int port, string consumerSecret, long userId, LogLevel logLevel) : base(port, logLevel)
+        {
             ConsumerSecret = consumerSecret;
+            Recipient = userId;
 
             GetReceived += WebhookServer_GetReceived;
             PostReceived += WebhookServer_PostReceived;
         }
 
-
         public override string WebhookPath => "webhook"; // http://host:port/webhook
 
         public string ConsumerSecret { get; private set; }
 
+        /// <summary>
+        /// 0 - process any subscription
+        /// </summary>
+        public long Recipient { get; set; } = 0;
 
+        
         public delegate void MessageHandler(MessageEventArgs e);
 
         public delegate void FollowHandler(FollowEventArgs e);
@@ -38,6 +54,8 @@ namespace Bots.Twitter.Webhook
 
         public event FollowHandler OnFollow;
 
+        public event FollowHandler OnUnFollow;
+
         public event TweetHandler OnTweet;
 
         public event TweetHandler OnRetweet;
@@ -45,6 +63,8 @@ namespace Bots.Twitter.Webhook
         public event TweetHandler OnQuote;
 
         public event TweetHandler OnComment;
+
+        public event TweetHandler OnMention;
 
         public event LikeHandler OnLike;
 
@@ -106,6 +126,13 @@ namespace Bots.Twitter.Webhook
 #endif
                 e.IsValid = true;
 
+                if (Recipient != 0)
+                {
+                    RecipientChecker check = e.Body.FromJson<RecipientChecker>();
+
+                    if (Recipient != check.Recipient) return;
+                }
+
                 WebhookEvent webhookEvent = e.Body.FromJson<WebhookEvent>();
 
                 if (webhookEvent.DirectMessageEvents != null)
@@ -116,6 +143,7 @@ namespace Bots.Twitter.Webhook
                         {
                             MessageEventArgs args = new MessageEventArgs()
                             {
+                                Recipient = webhookEvent.Recipient,
                                 Message = item.ToMessage()
                             };
 
@@ -128,14 +156,16 @@ namespace Bots.Twitter.Webhook
                 }
 
                 if (webhookEvent.FollowEvents != null)
-                {                
-                    if (OnFollow != null)
+                {
+                    foreach (var item in webhookEvent.FollowEvents)
                     {
-                        foreach (var item in webhookEvent.FollowEvents)
+                        if (item.Type == "follow" && OnFollow != null)
                         {
                             FollowEventArgs args = new FollowEventArgs()
                             {
+                                Recipient = webhookEvent.Recipient,
                                 Timestamp = item.Timestamp,
+                                Type = FollowType.Follow,
                                 Target = item.Target,
                                 Source = item.Source
                             };
@@ -143,7 +173,24 @@ namespace Bots.Twitter.Webhook
                             await Task.Run(() =>
                             {
                                 OnFollow.Invoke(args);
-                            }); 
+                            });
+                        }
+
+                        if (item.Type == "unfollow" && OnFollow != null)
+                        {
+                            FollowEventArgs args = new FollowEventArgs()
+                            {
+                                Recipient = webhookEvent.Recipient,
+                                Timestamp = item.Timestamp,
+                                Type = FollowType.Unfollow,
+                                Target = item.Target,
+                                Source = item.Source
+                            };
+
+                            await Task.Run(() =>
+                            {
+                                OnUnFollow.Invoke(args);
+                            });
                         }
                     }
                 }
@@ -154,6 +201,7 @@ namespace Bots.Twitter.Webhook
                     {
                         TweetEventArgs args = new TweetEventArgs()
                         {
+                            Recipient = webhookEvent.Recipient,
                             Tweet = item
                         };
 
@@ -185,13 +233,26 @@ namespace Bots.Twitter.Webhook
                             processed = true;
                         }
 
-                        if (item.ReplyToUserId != null)
+                        if (item.ReplyToUserId != null && item.ReplyToStatusId != null)
                         { 
                             if (OnComment != null)
                             {
                                 await Task.Run(() =>
                                 {
                                     OnComment.Invoke(args);
+                                });
+                            }
+
+                            processed = true;
+                        }
+
+                        if (item.ReplyToUserId != null && item.ReplyToStatusId == null)
+                        {
+                            if (OnMention != null)
+                            {
+                                await Task.Run(() =>
+                                {
+                                    OnMention.Invoke(args);
                                 });
                             }
 
@@ -234,6 +295,7 @@ namespace Bots.Twitter.Webhook
                         {
                             LikeEventArgs args = new LikeEventArgs()
                             {
+                                Recipient = webhookEvent.Recipient,
                                 Id = item.Id,
                                 Timestamp = item.Timestamp,
                                 Tweet = item.Tweet,
