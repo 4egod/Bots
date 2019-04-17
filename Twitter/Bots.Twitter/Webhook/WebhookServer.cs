@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Bots.Twitter.Webhook
 {
@@ -76,7 +77,7 @@ namespace Bots.Twitter.Webhook
             }
         }
 
-        private void WebhookServer_PostReceived(WebhookEventArgs e)
+        private async void WebhookServer_PostReceived(WebhookEventArgs e)
         {
             try
             {
@@ -118,8 +119,10 @@ namespace Bots.Twitter.Webhook
                                 Message = item.ToMessage()
                             };
 
-                            OnMessage.Invoke(args);
-                            //ThreadPool.QueueUserWorkItem(state => MessageReceived.Invoke(messageEventArgs));
+                            await Task.Run(() =>
+                            {
+                                OnMessage.Invoke(args);
+                            });
                         }
                     }
                 }
@@ -137,7 +140,10 @@ namespace Bots.Twitter.Webhook
                                 Source = item.Source
                             };
 
-                            OnFollow.Invoke(args);
+                            await Task.Run(() =>
+                            {
+                                OnFollow.Invoke(args);
+                            }); 
                         }
                     }
                 }
@@ -155,25 +161,52 @@ namespace Bots.Twitter.Webhook
 
                         if (item.RetweetedFrom != null)
                         {
-                            OnRetweet?.Invoke(args);
+                            if (OnRetweet != null)
+                            {
+                                await Task.Run(() =>
+                                {
+                                    OnRetweet.Invoke(args);
+                                });
+                            }
+
                             processed = true;
                         }
 
                         if (item.QuotedFrom != null)
                         {
-                            OnQuote?.Invoke(args);
+                            if (OnQuote != null)
+                            {
+                                await Task.Run(() =>
+                                {
+                                    OnQuote.Invoke(args);
+                                });
+                            }
+
                             processed = true;
                         }
 
                         if (item.ReplyToUserId != null)
-                        {
-                            OnComment?.Invoke(args);
+                        { 
+                            if (OnComment != null)
+                            {
+                                await Task.Run(() =>
+                                {
+                                    OnComment.Invoke(args);
+                                });
+                            }
+
                             processed = true;
                         }
 
                         if (!processed)
                         {
-                            OnTweet?.Invoke(args);
+                            if (OnTweet != null)
+                            {
+                                await Task.Run(() =>
+                                {
+                                    OnTweet.Invoke(args);
+                                });
+                            }
                         }
                     }
 
@@ -207,7 +240,10 @@ namespace Bots.Twitter.Webhook
                                 User = item.User
                             };
 
-                            OnLike.Invoke(args);
+                            await Task.Run(() =>
+                            {
+                                OnLike.Invoke(args);
+                            });  
                         }
                     }
                 }

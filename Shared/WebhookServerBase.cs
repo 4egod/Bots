@@ -156,13 +156,17 @@ namespace Bots
 
             try
             {
-                GetReceived?.Invoke(new WebhookEventArgs()
+                if (GetReceived != null)
                 {
-                    Request = request,
-                    Response = response
-                });
-
-                await Task.CompletedTask;
+                    await Task.Run(() =>
+                    {
+                        GetReceived.Invoke(new WebhookEventArgs()
+                        {
+                            Request = request,
+                            Response = response
+                        });
+                    });
+                }
             }
             catch (Exception e)
             {
@@ -181,15 +185,19 @@ namespace Bots
 
                 string body = Encoding.UTF8.GetString(bodyRaw);
 
-                PostReceived?.Invoke(new WebhookEventArgs()
+                if (PostReceived != null)
                 {
-                    Request = request,
-                    BodyRaw = bodyRaw,
-                    Body = body,
-                    Response = response
-                });
-
-                await Task.CompletedTask;
+                    await Task.Run(() =>
+                    {
+                        PostReceived.Invoke(new WebhookEventArgs()
+                        {
+                            Request = request,
+                            BodyRaw = bodyRaw,
+                            Body = body,
+                            Response = response
+                        });
+                    });
+                }
             }
             catch (Exception e)
             {
