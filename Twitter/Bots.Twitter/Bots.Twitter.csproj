@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp2.1</TargetFrameworks>
     <Authors>Dmitry Tarasov</Authors>
-    <Version>0.19.4.12</Version>
+    <Version>0.19.4.15</Version>
     <Copyright>Copyright (C) Dmitry Tarasov, 2019</Copyright>
     <RepositoryType>git</RepositoryType>
     <PackageTags>twitter, bot, bots, chat, chatbot, api, sdk</PackageTags>

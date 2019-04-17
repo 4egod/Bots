@@ -16,6 +16,7 @@ namespace Bots.Twitter
         private bool isWebhookEnabled;
         private UsersClient usersClient;
         private DirectMessagesClient directMessagesClient;
+        private WelcomeMessageClient welcomeMessageClient;
 
         public TwitterBot(int webhookPort, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, LogLevel logLevel = DefaultLogLevel) :
             base(webhookPort, consumerSecret, logLevel)
@@ -28,7 +29,8 @@ namespace Bots.Twitter
             AccessTokenSecret = accessTokenSecret;
 
             usersClient = new UsersClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
-            directMessagesClient = new DirectMessagesClient(consumerKey, consumerSecret, accessToken, accessTokenSecret); 
+            directMessagesClient = new DirectMessagesClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+            welcomeMessageClient = new WelcomeMessageClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
         }
 
         public string ConsumerKey { get; private set; }
@@ -52,6 +54,11 @@ namespace Bots.Twitter
             return await usersClient.GetUserAsync(userId);
         }
 
+        public async Task<User> GetUserAsync(string screenName)
+        {
+            return await usersClient.GetUserAsync(screenName);
+        }
+
         public async Task<Message> SendMessageAsync(long userId, string text)
         {
             return await SendMessageAsync(userId, text, null);
@@ -63,5 +70,17 @@ namespace Bots.Twitter
 
             return messageEvent.ToMessage();
         }
+
+        public async Task<WelcomeMessage> CreateWelcomeMessageAsync(string text)
+        {
+            return await CreateWelcomeMessageAsync(text, null);
+        }
+
+        public async Task<WelcomeMessage> CreateWelcomeMessageAsync(string text, QuickReply quickReply)
+        {
+            return (await welcomeMessageClient.CreateWelcomeMessageAsync(null, text, quickReply)).ToWelcomeMessage();
+        }
+
+
     }
 }

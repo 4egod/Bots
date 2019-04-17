@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace Bots.Twitter.Api
 {
     using Models;
+    using System.Net;
 
     internal abstract class BaseApiClient
     {
@@ -69,6 +70,19 @@ namespace Bots.Twitter.Api
             }
 
             return Parse<T>(response);
+        }
+
+        protected async Task<HttpStatusCode> DeleteAsync(string uri)
+        {
+            HttpStatusCode code;
+            using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Delete, uri))
+            {
+                req.Headers.Add("Authorization", GenerateAuthorizationHeader(uri, HttpMethod.Delete));
+                var res = await httpClient.SendAsync(req);
+                code = res.StatusCode;
+            }
+
+            return code;
         }
 
         protected string GenerateAuthorizationHeader(string requestUri, HttpMethod method)
