@@ -1,8 +1,5 @@
 ﻿using Bots.Twitter.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Bots.Twitter.Tests
 {
@@ -37,7 +34,7 @@ namespace Bots.Twitter.Tests
         [TestMethod]
         public void GetUserByNameTest()
         {
-            User result = client.GetUserAsync("4egod").Result;
+            User result = client.GetUserAsync("@4egod").Result;
             Trace.WriteLine($"User: {result.ToJson()}");
         }
     }
