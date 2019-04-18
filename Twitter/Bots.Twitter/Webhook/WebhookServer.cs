@@ -17,14 +17,14 @@ namespace Bots.Twitter.Webhook
             public long Recipient { get; set; }
         }
 
-        public WebhookServer(int port, string consumerSecret, LogLevel logLevel) : this(port, consumerSecret, 0, logLevel)
+        public WebhookServer(int port, string consumerSecret, LogLevel logLevel) : this(port, 0, consumerSecret, logLevel)
         {      
         }
 
-        public WebhookServer(int port, string consumerSecret, long userId, LogLevel logLevel) : base(port, logLevel)
+        public WebhookServer(int port, long recipient, string consumerSecret, LogLevel logLevel) : base(port, logLevel)
         {
             ConsumerSecret = consumerSecret;
-            Recipient = userId;
+            Recipient = recipient;
 
             GetReceived += WebhookServer_GetReceived;
             PostReceived += WebhookServer_PostReceived;
@@ -176,7 +176,7 @@ namespace Bots.Twitter.Webhook
                             });
                         }
 
-                        if (item.Type == "unfollow" && OnFollow != null)
+                        if (item.Type == "unfollow" && OnUnFollow != null)
                         {
                             FollowEventArgs args = new FollowEventArgs()
                             {

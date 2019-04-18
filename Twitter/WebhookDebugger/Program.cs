@@ -11,7 +11,7 @@ namespace WebhookDebugger
 
     class Program
     {
-        static TwitterBot bot = new TwitterBot(80, ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, LogLevel.Warning);
+        static TwitterBot bot = new TwitterBot(8080, 0, ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, LogLevel.Warning);
 
         static bool RawDebug = false;
 

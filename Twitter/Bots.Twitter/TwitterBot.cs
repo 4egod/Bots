@@ -24,7 +24,7 @@ namespace Bots.Twitter
         }
 
         public TwitterBot(int webhookPort, long recipient, string consumerKey, string consumerSecret, string accessToken, 
-            string accessTokenSecret, LogLevel logLevel = DefaultLogLevel) : base(webhookPort, consumerSecret, logLevel)
+            string accessTokenSecret, LogLevel logLevel = DefaultLogLevel) : base(webhookPort, recipient, consumerSecret, logLevel)
         {
             isWebhookEnabled = true;
 
