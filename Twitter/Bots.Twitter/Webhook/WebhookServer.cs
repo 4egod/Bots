@@ -21,7 +21,12 @@ namespace Bots.Twitter.Webhook
         {      
         }
 
-        public WebhookServer(int port, long recipient, string consumerSecret, LogLevel logLevel) : base(port, logLevel)
+        public WebhookServer(int port, long recipient, string consumerSecret, LogLevel logLevel) : 
+            this(port, null, null, recipient, consumerSecret, logLevel)
+        {
+        }
+
+        public WebhookServer(int port, string pfxPath, string pfxPassword, long recipient, string consumerSecret, LogLevel logLevel) : base(port, pfxPath, pfxPassword, logLevel)
         {
             ConsumerSecret = consumerSecret;
             Recipient = recipient;

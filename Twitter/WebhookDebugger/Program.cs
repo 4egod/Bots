@@ -11,7 +11,15 @@ namespace WebhookDebugger
 
     class Program
     {
-        static TwitterBot bot = new TwitterBot(8080, 0, ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, LogLevel.Warning);
+        /// <summary>
+        /// Using HTTPS
+        /// </summary>
+        //static TwitterBot bot = new TwitterBot(443, "certificate.pfx", "",  0, ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, LogLevel.Warning);
+
+        /// <summary>
+        /// Using HTTP
+        /// </summary>
+        static TwitterBot bot = new TwitterBot(80, ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, LogLevel.Warning);
 
         static bool RawDebug = false;
 

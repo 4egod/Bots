@@ -15,16 +15,23 @@ namespace Bots
 {
     public abstract class WebhookServerBase
     {
-        public WebhookServerBase(int port, LogLevel logLevel)
+        private string pfxPath, pfxPassword;
+
+        public WebhookServerBase(int port, LogLevel logLevel) : this(port, null, null, logLevel)
+        {
+        }
+
+        public WebhookServerBase(int port, string pfxPath, string pfxPassword, LogLevel logLevel)
         {
             LogLevel = logLevel;
             Port = port;
             LoggerFactory factory = new LoggerFactory();
             factory.AddConsole().AddDebug();
             Logger = factory.CreateLogger(this.GetType().ToString() + $"[WITHOUT_WEBHOOK]");
+            this.pfxPath = pfxPath;
+            this.pfxPassword = pfxPassword;
             CreateWebhookHost();
         }
-
 
         public abstract string WebhookPath { get; }
 
@@ -120,7 +127,11 @@ namespace Bots
 
             builder.UseKestrel(options =>
             {
-                options.Listen(IPAddress.Any, Port);
+                if (pfxPath == null) options.Listen(IPAddress.Any, Port);
+                else options.Listen(IPAddress.Any, Port, op=>
+                {
+                    op.UseHttps(pfxPath, pfxPassword);
+                });
             });
 
             builder.Configure(cfg =>
