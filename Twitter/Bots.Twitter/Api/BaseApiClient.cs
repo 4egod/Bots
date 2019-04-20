@@ -46,7 +46,7 @@ namespace Bots.Twitter.Api
             string response;
             using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Get, uri))
             {
-                req.Headers.Add("Authorization", GenerateAuthorizationHeader(uri, HttpMethod.Get));
+                req.Headers.Authorization = GetAuthorizationHeader(uri, HttpMethod.Get);
                 response = await (await httpClient.SendAsync(req)).Content.ReadAsStringAsync();
             }
 
@@ -55,17 +55,22 @@ namespace Bots.Twitter.Api
 
         protected async Task<T> PostAsync<T>(object request, string uri)
         {
-#if DEBUG
-            string requestCmd = JsonConvert.SerializeObject(request, Formatting.Indented);
-#else
-            string requestCmd = JsonConvert.SerializeObject(request);
-#endif
             string response;
 
             using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, uri))
             {
-                req.Headers.Add("Authorization", GenerateAuthorizationHeader(uri, HttpMethod.Post));
-                req.Content = new StringContent(requestCmd, Encoding.UTF8, ContentTypes.ApplicationJson);
+                req.Headers.Authorization = GetAuthorizationHeader(uri, HttpMethod.Post);
+                if (request != null)
+                {
+#if DEBUG
+                    string requestCmd = JsonConvert.SerializeObject(request, Formatting.Indented);
+#else
+                    string requestCmd = JsonConvert.SerializeObject(request);
+#endif
+
+                    req.Content = new StringContent(requestCmd, Encoding.UTF8, ContentTypes.ApplicationJson);
+                }
+                
                 response = await (await httpClient.SendAsync(req)).Content.ReadAsStringAsync();
             }
 
@@ -77,63 +82,12 @@ namespace Bots.Twitter.Api
             HttpStatusCode code;
             using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Delete, uri))
             {
-                req.Headers.Add("Authorization", GenerateAuthorizationHeader(uri, HttpMethod.Delete));
+                req.Headers.Authorization = GetAuthorizationHeader(uri, HttpMethod.Delete);
                 var res = await httpClient.SendAsync(req);
                 code = res.StatusCode;
             }
 
             return code;
-        }
-
-        protected string GenerateAuthorizationHeader(string requestUri, HttpMethod method)
-        {
-            Uri uri = new Uri(requestUri, UriKind.RelativeOrAbsolute);
-
-            string nonce = DateTime.Now.Ticks.ToString();
-            string timestamp = DateTime.Now.ToUnixTimestamp().ToString();
-
-            Dictionary<string, string> authParams = new Dictionary<string, string>();
-            authParams.Add("oauth_consumer_key", ConsumerKey);
-            authParams.Add("oauth_nonce", nonce);
-            authParams.Add("oauth_signature_method", "HMAC-SHA1");
-            authParams.Add("oauth_timestamp", timestamp);
-            authParams.Add("oauth_token", AccessToken);
-            authParams.Add("oauth_version", "1.0");
-
-            Dictionary<string, string> sigParams = new Dictionary<string, string>();
-            foreach (var item in authParams)
-            {
-                sigParams.Add(item.Key, item.Value);
-            }
-
-            Dictionary<string, string> queryParams = GetParams(uri);
-            foreach (var item in queryParams)
-            {
-                sigParams.Add(item.Key, item.Value);
-            }
-
-            string s = string.Join("&", sigParams.OrderBy(x => x.Key).Select(x => $"{x.Key}={x.Value}"));
-            string url = requestUri.Contains("?") ? requestUri.Substring(0, requestUri.IndexOf("?")) : requestUri;
-
-            s = string.Concat(method.Method.ToUpper(), "&", Uri.EscapeDataString(url), "&", Uri.EscapeDataString(s));
-
-            byte[] key = Encoding.ASCII.GetBytes(string.Concat(Uri.EscapeDataString(ConsumerSecret), "&", Uri.EscapeDataString(AccessTokenSecret)));
-
-            string signature;
-            using (HMACSHA1 hasher = new HMACSHA1(key))
-            {
-                signature = Convert.ToBase64String(hasher.ComputeHash(Encoding.ASCII.GetBytes(s)));
-            }
-
-            string res = "OAuth ";
-            foreach (var item in authParams)
-            {
-                res += $"{item.Key} = \"{Uri.EscapeDataString(item.Value)}\", ";
-            }
-
-            res += $"oauth_signature = \"{Uri.EscapeDataString(signature)}\"";
-
-            return res;
         }
 
         private T Parse<T>(string response)
@@ -156,16 +110,54 @@ namespace Bots.Twitter.Api
             return res;
         }
 
-        private Dictionary<string, string> GetParams(Uri uri)
+        protected AuthenticationHeaderValue GetAuthorizationHeader(string uri, HttpMethod method)
         {
-            MatchCollection matches = Regex.Matches(uri.AbsoluteUri, @"[\?&](([^&=]+)=([^&=#]*))", RegexOptions.Compiled);
-            Dictionary<string, string> keyValues = new Dictionary<string, string>(matches.Count);
-            foreach (Match m in matches)
+            string nonce = DateTime.Now.Ticks.ToString();
+            string timestamp = DateTime.Now.ToUnixTimestamp().ToString();
+
+            List<string> authParams = new List<string>();
+            authParams.Add("oauth_consumer_key=" + ConsumerKey);
+            authParams.Add("oauth_nonce=" + nonce);
+            authParams.Add("oauth_signature_method=HMAC-SHA1");
+            authParams.Add("oauth_timestamp=" + timestamp);
+            authParams.Add("oauth_token=" + AccessToken);
+            authParams.Add("oauth_version=1.0");
+
+            SplitUri(uri, out string url, out string[] queryParams);
+
+            List<string> requestParams = new List<string>(authParams);
+            requestParams.AddRange(queryParams);
+            requestParams.Sort();
+
+            string signatureBaseString = string.Join("&", requestParams);
+            signatureBaseString = string.Concat(method.Method.ToUpper(), "&", Uri.EscapeDataString(url), "&", Uri.EscapeDataString(signatureBaseString));
+
+            string signature = GetSignature(signatureBaseString);
+
+            string hv = string.Join(", ", authParams.Select(x => x.Replace("=", " = \"") + '"'));
+            hv += $", oauth_signature=\"{Uri.EscapeDataString(signature)}\"";      
+
+            return new AuthenticationHeaderValue("OAuth", hv);
+        }
+
+        protected string GetSignature(string signatureBaseString)
+        {
+            byte[] key = Encoding.ASCII.GetBytes(string.Concat(Uri.EscapeDataString(ConsumerSecret), "&", Uri.EscapeDataString(AccessTokenSecret)));
+
+            string signature;
+            using (HMACSHA1 hasher = new HMACSHA1(key))
             {
-                keyValues.Add(Uri.UnescapeDataString(m.Groups[2].Value), Uri.UnescapeDataString(m.Groups[3].Value));
+                signature = Convert.ToBase64String(hasher.ComputeHash(Encoding.ASCII.GetBytes(signatureBaseString)));
             }
 
-            return keyValues;
+            return signature;
+        }
+
+        protected void SplitUri(string uri, out string url, out string[] queryParams)
+        {
+            int pos = uri.IndexOf('?');
+            url = uri.Substring(0, pos);
+            queryParams = uri.Substring(pos + 1).Split('&');
         }
     }
 }
