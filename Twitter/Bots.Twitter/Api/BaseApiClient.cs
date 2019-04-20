@@ -6,12 +6,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bots.Twitter.Api
 {
-    using Models;
     using System.Net;
 
     internal abstract class BaseApiClient
