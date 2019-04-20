@@ -17,6 +17,7 @@ namespace Bots.Twitter
         private UsersClient usersClient;
         private DirectMessagesClient directMessagesClient;
         private WelcomeMessageClient welcomeMessageClient;
+        private TweetClient tweetClient;
 
         public TwitterBot(int webhookPort, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, LogLevel logLevel = DefaultLogLevel) :
             this(webhookPort, 0, consumerKey, consumerSecret, accessToken, accessTokenSecret, logLevel)
@@ -42,6 +43,7 @@ namespace Bots.Twitter
             usersClient = new UsersClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
             directMessagesClient = new DirectMessagesClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
             welcomeMessageClient = new WelcomeMessageClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+            tweetClient = new TweetClient(consumerKey, consumerSecret, accessToken, accessTokenSecret);
         }
 
         public string ConsumerKey { get; private set; }
@@ -92,6 +94,9 @@ namespace Bots.Twitter
             return (await welcomeMessageClient.CreateWelcomeMessageAsync(null, text, quickReply)).ToWelcomeMessage();
         }
 
-
+        public async Task<Tweet> TweetAsync(string text)
+        {
+            return await tweetClient.TweetAsync(text);
+        }
     }
 }
