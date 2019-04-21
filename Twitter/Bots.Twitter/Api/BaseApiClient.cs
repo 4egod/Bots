@@ -154,8 +154,16 @@ namespace Bots.Twitter.Api
         protected void SplitUri(string uri, out string url, out string[] queryParams)
         {
             int pos = uri.IndexOf('?');
-            url = uri.Substring(0, pos);
-            queryParams = uri.Substring(pos + 1).Split('&');
+            if (pos == -1)
+            {
+                url = uri;
+                queryParams = new string[0];
+            }
+            else
+            {
+                url = uri.Substring(0, pos);
+                queryParams = uri.Substring(pos + 1).Split('&');
+            }
         }
     }
 }
