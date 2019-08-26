@@ -7,7 +7,7 @@ namespace Messenger.Bot.SendAPI
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("phone_number")]
+        [JsonProperty("phone_number", NullValueHandling = NullValueHandling.Ignore)]
         public string PhoneNumber;
 
         [JsonProperty("user_ref")]
